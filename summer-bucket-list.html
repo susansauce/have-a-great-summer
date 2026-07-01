@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Have a Great Summer — Bucket List Generator</title>
+<meta name="description" content="Make a beautiful, personalized summer bucket list in seconds. Get ideas, check them off, share it." />
+
+<!-- ================================================================
+  FAVICON + SHARE PREVIEW
+  Upload favicon.ico, favicon-32.png, favicon-16.png, apple-touch-icon.png,
+  and og-image.png to the SAME folder as this index.html before deploying.
+  Currently pointed at https://have-a-great-summer.netlify.app/ —
+  if you rename the Netlify site or add a custom domain later, update
+  the three URLs below (og:image, og:url, twitter:image) to match.
+================================================================ -->
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Have a Great Summer — Bucket List Generator" />
+<meta property="og:description" content="Make a beautiful, personalized summer bucket list in seconds. Get ideas, check them off, share it." />
+<meta property="og:image" content="https://have-a-great-summer.netlify.app/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://have-a-great-summer.netlify.app/" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Have a Great Summer — Bucket List Generator" />
+<meta name="twitter:description" content="Make a beautiful, personalized summer bucket list in seconds." />
+<meta name="twitter:image" content="https://have-a-great-summer.netlify.app/og-image.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root{
+    --ink:#2C2350; --ink-soft:#6A6190;
+    --coral:#FF5A7A; --tang:#FF8A3D; --sun:#FFC23C; --lime:#37C97A; --sky:#3CB4FF; --grape:#8B6CF0; --bubble:#FF73C7;
+    --paper:#FFFFFF;
+    --display:'Fredoka',system-ui,sans-serif;
+    --body:'Nunito',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;font-family:var(--body);color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 12% -8%, #FFE6B8 0%, transparent 55%),
+      radial-gradient(1000px 600px at 100% 0%, #FFC7DE 0%, transparent 50%),
+      radial-gradient(900px 700px at 50% 120%, #BDEBC9 0%, transparent 55%),
+      #FFF7EC;
+    min-height:100vh;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px;}
+
+  /* ---------- header ---------- */
+  header{text-align:center;padding:46px 0 8px;}
+  .kicker{font-family:var(--display);font-weight:600;letter-spacing:.28em;text-transform:uppercase;font-size:13px;color:var(--coral);margin:0 0 10px;}
+  h1.title{
+    font-family:var(--display);font-weight:700;letter-spacing:-.02em;line-height:.96;
+    font-size:clamp(44px,9vw,90px);margin:0;color:var(--ink);
+  }
+  h1.title .pop{
+    display:inline-block;background:linear-gradient(95deg,var(--coral),var(--tang) 45%,var(--sun));
+    -webkit-background-clip:text;background-clip:text;color:transparent;transform:rotate(-2deg);
+  }
+  .tagline{font-size:clamp(16px,2.4vw,20px);color:var(--ink-soft);font-weight:600;margin:16px auto 0;max-width:30ch;}
+  .hero-meta{
+    display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
+    margin:18px auto 0;font-family:var(--display);font-weight:600;font-size:14px;color:var(--ink-soft);
+  }
+  .hero-meta .dot-sep{opacity:.5;}
+  #visitorCount:empty{display:none;}
+
+  /* ---------- controls ---------- */
+  .panel{
+    background:rgba(255,255,255,.78);backdrop-filter:blur(6px);
+    border:2px solid #fff;border-radius:26px;
+    box-shadow:0 30px 60px -36px rgba(70,40,90,.45);
+    padding:26px clamp(18px,3vw,32px);margin:30px auto 0;max-width:760px;
+  }
+  .field{margin:0 0 18px;}
+  .field:last-child{margin-bottom:0;}
+  .flabel{font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.02em;color:var(--ink);margin:0 0 10px;display:block;}
+  .inrow{display:flex;gap:12px;flex-wrap:wrap;}
+  input[type=text]{
+    font-family:var(--body);font-weight:600;font-size:16px;color:var(--ink);
+    width:100%;padding:14px 16px;border-radius:14px;border:2px solid #efe6f5;background:#fff;
+  }
+  input[type=text]::placeholder{color:#b3acc8;font-weight:600;}
+  input[type=text]:focus{outline:none;border-color:var(--grape);box-shadow:0 0 0 4px rgba(139,108,240,.18);}
+  .name-field{flex:1 1 240px;}
+
+  .chips{display:flex;gap:9px;flex-wrap:wrap;}
+  .chip{
+    font-family:var(--body);font-weight:700;font-size:14px;cursor:pointer;user-select:none;
+    padding:9px 15px;border-radius:999px;border:2px solid #ebe3f3;background:#fff;color:var(--ink-soft);
+    transition:transform .12s ease, background .15s ease, color .15s, border-color .15s;
+  }
+  .chip:hover{transform:translateY(-1px);}
+  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+  .gen{
+    margin-top:24px;width:100%;cursor:pointer;border:none;
+    font-family:var(--display);font-weight:700;font-size:20px;color:#fff;letter-spacing:.01em;
+    padding:18px 24px;border-radius:18px;
+    background:linear-gradient(95deg,var(--coral),var(--grape));
+    box-shadow:0 14px 30px -10px rgba(255,90,122,.6);
+    transition:transform .12s ease, box-shadow .2s ease;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+  }
+  .gen:hover{transform:translateY(-2px);box-shadow:0 20px 36px -10px rgba(139,108,240,.6);}
+  .gen:active{transform:translateY(0) scale(.99);}
+
+  /* ---------- mode toggle + write-your-own ---------- */
+  .modes{display:flex;gap:8px;background:#f1eaf7;border-radius:14px;padding:5px;margin-bottom:20px;}
+  .modetab{flex:1;border:none;cursor:pointer;font-family:var(--display);font-weight:600;font-size:15px;color:var(--ink-soft);background:transparent;padding:11px 10px;border-radius:10px;transition:all .15s;}
+  .modetab.on{background:#fff;color:var(--ink);box-shadow:0 6px 14px -8px rgba(70,40,90,.4);}
+  #mode-own textarea{width:100%;font-family:var(--body);font-weight:600;font-size:16px;color:var(--ink);padding:14px 16px;border-radius:14px;border:2px solid #efe6f5;background:#fff;resize:vertical;line-height:1.55;}
+  #mode-own textarea::placeholder{color:#b3acc8;font-weight:600;}
+  #mode-own textarea:focus{outline:none;border-color:var(--grape);box-shadow:0 0 0 4px rgba(139,108,240,.18);}
+
+  /* ---------- results ---------- */
+  .results{margin:46px 0 30px;display:none;}
+  .results.show{display:block;}
+  .result-head{text-align:center;margin-bottom:24px;}
+  .list-title{
+    font-family:var(--display);font-weight:700;font-size:clamp(28px,5vw,46px);letter-spacing:-.01em;
+    color:var(--ink);border:none;background:transparent;text-align:center;outline:none;
+    border-bottom:3px dashed transparent;padding:2px 6px;border-radius:6px;
+  }
+  .list-title:hover,.list-title:focus{border-bottom-color:var(--sun);}
+  .edit-hint{font-size:13px;color:var(--ink-soft);font-weight:600;margin-top:4px;}
+  .progress-wrap{max-width:340px;margin:16px auto 0;}
+  .bar{height:12px;border-radius:99px;background:#fff;overflow:hidden;border:2px solid #fff;box-shadow:inset 0 0 0 1px #efe6f5;}
+  .bar > span{display:block;height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,var(--lime),var(--sky));transition:width .5s cubic-bezier(.2,.8,.2,1);}
+  .progress-label{font-weight:700;font-size:13px;color:var(--ink-soft);margin-top:7px;}
+  .savelink-btn{
+    margin-top:14px;font-family:var(--display);font-weight:700;font-size:13px;color:var(--grape);cursor:pointer;
+    background:#fff;border:2px solid #ebe3f3;padding:8px 16px;border-radius:11px;
+    transition:transform .12s ease, border-color .15s ease;
+  }
+  .savelink-btn:hover{transform:translateY(-1px);border-color:var(--grape);}
+
+  /* bento grid */
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;grid-auto-flow:dense;}
+  .card{
+    position:relative;border-radius:22px;padding:20px;cursor:pointer;
+    background:var(--cardbg,#fff);border:2px solid #fff;overflow:hidden;
+    box-shadow:0 18px 34px -24px rgba(70,40,90,.5);
+    transition:transform .14s ease, box-shadow .2s ease, opacity .3s;
+    min-height:128px;display:flex;flex-direction:column;justify-content:space-between;
+    animation:pop .42s cubic-bezier(.2,.9,.3,1.3) both;
+  }
+  @keyframes pop{from{opacity:0;transform:scale(.8) translateY(10px);}to{opacity:1;transform:none;}}
+  .card:hover{transform:translateY(-4px) rotate(-.4deg);box-shadow:0 26px 44px -22px rgba(70,40,90,.55);}
+  .card.big{grid-column:span 2;grid-row:span 2;min-height:200px;}
+  .card.wide{grid-column:span 2;}
+  .card .emoji{font-size:34px;line-height:1;}
+  .card.big .emoji{font-size:54px;}
+  .card .txt{font-family:var(--display);font-weight:600;font-size:16px;line-height:1.18;color:var(--ink);margin-top:14px;}
+  .card.big .txt{font-size:24px;}
+  .card .cat{font-family:var(--body);font-weight:800;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent,#999);margin-top:6px;}
+  .check{
+    position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;
+    border:3px solid rgba(44,35,80,.18);background:rgba(255,255,255,.6);
+    display:flex;align-items:center;justify-content:center;transition:all .2s ease;
+  }
+  .check svg{width:16px;height:16px;opacity:0;transform:scale(.4);transition:all .2s ease;}
+  .card.done{}
+  .card.done .check{background:var(--accent,#37C97A);border-color:var(--accent,#37C97A);}
+  .card.done .check svg{opacity:1;transform:scale(1);}
+  .card.done .txt{text-decoration:line-through;text-decoration-thickness:2px;opacity:.55;}
+  .card.done .emoji{filter:grayscale(.5);opacity:.7;}
+  .card.done{transform:scale(.985);}
+  .card .swap, .card .remove{
+    position:absolute;bottom:12px;width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;
+    background:rgba(255,255,255,.8);color:var(--ink-soft);font-size:15px;line-height:1;
+    display:flex;align-items:center;justify-content:center;opacity:.5;
+    transition:opacity .15s, transform .15s, background .15s, color .15s;
+  }
+  .card .swap{right:12px;}
+  .card .remove{right:46px;font-size:19px;}
+  .card:hover .swap, .card:hover .remove{opacity:1;}
+  .card .swap:hover{transform:rotate(90deg);background:#fff;color:var(--ink);}
+  .card .remove:hover{background:#fff;color:var(--coral);}
+
+  .addcard{
+    border:2px dashed #d9cfe6;background:rgba(255,255,255,.4);border-radius:22px;min-height:128px;
+    display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;cursor:pointer;
+    font-family:var(--display);font-weight:600;color:var(--ink-soft);transition:all .15s;
+  }
+  .addcard:hover{border-color:var(--grape);color:var(--grape);background:rgba(255,255,255,.7);}
+
+  /* actions */
+  .actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:30px;}
+  .act{
+    font-family:var(--display);font-weight:600;font-size:15px;cursor:pointer;border:2px solid var(--ink);
+    background:#fff;color:var(--ink);padding:12px 20px;border-radius:14px;display:flex;align-items:center;gap:8px;
+    transition:transform .12s,background .15s,color .15s;
+  }
+  .act:hover{transform:translateY(-2px);background:var(--ink);color:#fff;}
+  .act.primary{background:var(--ink);color:#fff;}
+  .act.primary:hover{background:var(--grape);border-color:var(--grape);}
+  .regen{background:transparent;border:none;color:var(--ink-soft);font-family:var(--display);font-weight:600;font-size:15px;cursor:pointer;text-decoration:underline;padding:12px;}
+
+  .brandbar{margin-top:30px;text-align:center;padding-bottom:6px;}
+  .bb-line{width:64px;height:5px;border-radius:5px;background:linear-gradient(90deg,var(--coral),var(--sun));margin:0 auto 14px;}
+  .bb-name{font-family:var(--display);font-weight:700;font-size:23px;color:var(--ink);letter-spacing:-.01em;}
+  .bb-url{font-family:var(--body);font-weight:700;font-size:13px;letter-spacing:.08em;color:var(--ink-soft);margin-top:4px;text-transform:lowercase;}
+  /* hide interactive chrome while exporting the shareable image */
+  .exporting .swap, .exporting .remove, .exporting .addcard, .exporting .edit-hint{display:none !important;}
+
+  footer{text-align:center;padding:30px 0 50px;color:var(--ink-soft);font-weight:600;font-size:13px;line-height:2.2;}
+  footer a{text-decoration:underline;text-decoration-color:transparent;transition:text-decoration-color .15s;}
+  footer a:hover{text-decoration-color:currentColor;}
+
+  /* ---------- invite a friend ---------- */
+  .invite{padding:10px 0;}
+  .invitebar{
+    max-width:640px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:16px;
+    flex-wrap:wrap;text-align:center;padding:8px 10px;
+  }
+  .invite-txt{font-family:var(--display);font-weight:600;font-size:16px;color:var(--ink-soft);margin:0;}
+  .invite-btn{
+    font-family:var(--display);font-weight:700;font-size:15px;color:var(--grape);cursor:pointer;
+    background:#fff;border:2px solid var(--grape);padding:9px 18px;border-radius:12px;
+    transition:transform .12s ease, background .15s ease, color .15s ease;white-space:nowrap;
+  }
+  .invite-btn:hover{transform:translateY(-1px);background:var(--grape);color:#fff;}
+
+  /* ---------- stay-in-touch / feedback section ---------- */
+  .stay{padding:20px 0 10px;}
+  .staycard{
+    max-width:640px;margin:0 auto;background:rgba(255,255,255,.75);backdrop-filter:blur(6px);
+    border:2px solid #fff;border-radius:26px;padding:clamp(26px,4vw,40px);
+    box-shadow:0 24px 50px -32px rgba(70,40,90,.4);text-align:center;
+  }
+  .stay-kick{font-family:var(--body);font-weight:800;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--coral);margin:0 0 10px;}
+  .stay-h{font-family:var(--display);font-weight:700;font-size:clamp(22px,3.4vw,30px);letter-spacing:-.01em;color:var(--ink);margin:0 0 12px;}
+  .stay-sub{color:var(--ink-soft);font-size:15px;max-width:48ch;margin:0 auto 22px;line-height:1.55;}
+  .stay-form{display:flex;flex-direction:column;gap:12px;text-align:left;}
+  .stay-row input[type=email]{
+    width:100%;font-family:var(--body);font-weight:600;font-size:16px;color:var(--ink);
+    padding:13px 16px;border-radius:14px;border:2px solid #efe6f5;background:#fff;
+  }
+  .stay-form textarea{
+    width:100%;font-family:var(--body);font-weight:600;font-size:15px;color:var(--ink);
+    padding:13px 16px;border-radius:14px;border:2px solid #efe6f5;background:#fff;resize:vertical;line-height:1.5;
+  }
+  .stay-row input::placeholder, .stay-form textarea::placeholder{color:#b3acc8;font-weight:600;}
+  .stay-row input:focus, .stay-form textarea:focus{outline:none;border-color:var(--grape);box-shadow:0 0 0 4px rgba(139,108,240,.18);}
+  .stay-err{color:var(--coral);font-size:13px;min-height:0;}
+  .stay-err:empty{display:none;}
+  .stay-btn{
+    align-self:center;font-family:var(--display);font-weight:700;font-size:17px;color:#fff;cursor:pointer;border:none;
+    padding:13px 30px;border-radius:14px;background:linear-gradient(95deg,var(--coral),var(--grape));
+    box-shadow:0 12px 26px -10px rgba(255,90,122,.55);transition:transform .12s ease, box-shadow .2s ease;
+  }
+  .stay-btn:hover{transform:translateY(-2px);box-shadow:0 18px 32px -10px rgba(139,108,240,.55);}
+  .stay-btn:disabled{opacity:.6;cursor:default;transform:none;}
+  .stay-done{display:none;}
+  .stay-done.show{display:block;animation:pop .4s ease both;}
+  .stay-done p{font-family:var(--display);font-weight:600;font-size:18px;color:var(--ink);margin:0;}
+
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:50;}
+
+  /* add-item inline input */
+  .addbox{display:none;}
+  .addbox.show{display:flex;gap:10px;}
+  .toast{
+    position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);opacity:0;
+    background:var(--ink);color:#fff;font-weight:700;font-size:14px;padding:12px 20px;border-radius:12px;
+    transition:all .25s ease;z-index:60;pointer-events:none;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+  @media(max-width:760px){
+    .grid{grid-template-columns:repeat(2,1fr);}
+    .card.big{grid-column:span 2;grid-row:span 1;min-height:150px;}
+    .card.big .txt{font-size:19px;}
+    .card.big .emoji{font-size:42px;}
+  }
+  @media(max-width:430px){
+    .name-field{flex:1 1 100%;}
+  }
+  @media print{
+    body{background:#fff;}
+    .panel,.actions,.regen,.addcard,.edit-hint,.swap,header .tagline,.kicker{display:none !important;}
+    .card{break-inside:avoid;box-shadow:none;border:2px solid #eee;}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;}}
+</style>
+
+<!-- ================================================================
+  ANALYTICS — free, cookieless, no consent banner needed.
+  1. Create a free account at https://www.goatcounter.com
+  2. You'll get a site code like "yourname" (your dashboard URL is
+     https://yourname.goatcounter.com)
+  3. Replace YOUR-CODE below with that code. That's the only edit needed.
+================================================================ -->
+<script data-goatcounter="https://YOUR-CODE.goatcounter.com/count"
+        async src="https://gc.zgo.at/count.js"></script>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+
+<header>
+  <div class="wrap">
+    <p class="kicker">Summer 2026</p>
+    <h1 class="title">Your Summer <span class="pop">Bucket List</span></h1>
+    <p class="tagline">Tell us your vibe. Get a list worth actually doing — then check it off all summer.</p>
+    <div class="hero-meta" id="heroMeta">
+      <span id="countdownText">☀️ Loading…</span>
+      <span class="dot-sep">·</span>
+      <span id="visitorCount"></span>
+    </div>
+
+    <div class="panel" id="panel">
+      <div class="field">
+        <input type="text" id="name" class="name-field" placeholder="Your name (optional)" style="width:100%" />
+      </div>
+
+      <div class="modes">
+        <button class="modetab on" data-mode="inspire">✨ Inspire me</button>
+        <button class="modetab" data-mode="own">✏️ Write my own</button>
+      </div>
+
+      <div id="mode-inspire">
+      <div class="field">
+        <label class="flabel">What's your dream summer? <span style="color:var(--ink-soft);font-weight:600">(optional)</span></label>
+        <div class="inrow">
+          <input type="text" id="vibe" placeholder="e.g. cozy, lots of food, ocean, creative, road trip…" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="flabel">Who's it for?</label>
+        <div class="chips" data-group="who">
+          <span class="chip on" data-v="any">Anyone</span>
+          <span class="chip" data-v="solo">Me, myself & I</span>
+          <span class="chip" data-v="couple">Couple</span>
+          <span class="chip" data-v="family">Family</span>
+          <span class="chip" data-v="friends">Friends</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="flabel">What's the energy?</label>
+        <div class="chips" data-group="energy">
+          <span class="chip on" data-v="any">A mix</span>
+          <span class="chip" data-v="chill">Chill</span>
+          <span class="chip" data-v="adventure">Adventurous</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="flabel">Budget?</label>
+        <div class="chips" data-group="budget">
+          <span class="chip on" data-v="any">Any budget</span>
+          <span class="chip" data-v="free">Free &amp; cheap</span>
+          <span class="chip" data-v="splurge">Treat myself</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="flabel">Where?</label>
+        <div class="chips" data-group="setting">
+          <span class="chip on" data-v="any">Anywhere</span>
+          <span class="chip" data-v="beach">Beach</span>
+          <span class="chip" data-v="water">On the water</span>
+          <span class="chip" data-v="city">City</span>
+          <span class="chip" data-v="outdoors">Outdoors</span>
+        </div>
+      </div>
+
+      <button class="gen" id="genBtn" data-goatcounter-click="generate-inspire">✨ Make my bucket list</button>
+      </div><!-- /mode-inspire -->
+
+      <div id="mode-own" hidden>
+        <div class="field">
+          <label class="flabel">Write your summer list — one thing per line</label>
+          <textarea id="ownText" rows="6" placeholder="Watch the sunrise&#10;Beach day with friends&#10;Make homemade ice cream&#10;Finally learn to surf&#10;Road trip somewhere new"></textarea>
+        </div>
+        <button class="gen" id="ownBtn" data-goatcounter-click="generate-own">✏️ Make my list</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="results" id="results">
+  <div class="wrap">
+    <div class="result-head">
+      <div class="progress-wrap">
+        <div class="bar"><span id="barFill"></span></div>
+        <div class="progress-label" id="progLabel">0 of 0 done</div>
+      </div>
+      <button class="savelink-btn" id="saveLinkBtn" data-goatcounter-click="copy-save-link">🔗 Save my list (copy link)</button>
+    </div>
+
+    <div id="capture">
+      <div class="list-title" id="listTitle" contenteditable="true" spellcheck="false" oninput="lastImageBlob=null; syncUrl()">My Summer 2026 Bucket List</div>
+      <div class="edit-hint">↑ tap to rename</div>
+      <div class="grid" id="grid"></div>
+      <div class="brandbar">
+        <div class="bb-line"></div>
+        <div class="bb-name">☀️ <span id="bbName">Have a Great Summer</span></div>
+        <div class="bb-url" id="bbUrl">haveagreatsummer.com</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="act primary" id="shareImgBtn" data-goatcounter-click="share-image">📲 Share image</button>
+      <button class="act" id="imgBtn" data-goatcounter-click="save-image">📸 Save image</button>
+      <button class="act" id="printBtn" data-goatcounter-click="print">🖨️ Print</button>
+    </div>
+    <div style="text-align:center;margin-top:14px;">
+      <button class="regen" id="regenBtn" data-goatcounter-click="start-over">↻ Start over with a new vibe</button>
+    </div>
+  </div>
+</section>
+
+<section class="invite">
+  <div class="wrap">
+    <div class="invitebar">
+      <p class="invite-txt">Know someone who'd love a list like this? ☀️</p>
+      <button class="invite-btn" id="inviteBtn" data-goatcounter-click="invite-friend">📣 Tell a friend</button>
+    </div>
+  </div>
+</section>
+
+<section class="stay">
+  <div class="wrap">
+    <div class="staycard">
+      <p class="stay-kick">One more thing</p>
+      <h2 class="stay-h">Want to hear when we add more?</h2>
+      <p class="stay-sub">Rainy-day, fall, and "before school starts" packs are coming. Drop your email if you'd like a nudge — and tell us anything you loved, hated, or wish this did. Totally optional, both of them.</p>
+
+      <form class="stay-form" id="stayForm" novalidate>
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;">
+        <div class="stay-row">
+          <input type="email" name="email" id="stayEmail" placeholder="you@email.com (optional)" autocomplete="email" />
+        </div>
+        <textarea name="feedback" id="stayFeedback" rows="3" placeholder="Anything you'd change, add, or just want to say? (optional)"></textarea>
+        <div class="stay-err" id="stayErr" aria-live="polite"></div>
+        <button type="submit" class="stay-btn" data-goatcounter-click="feedback-submit">Send 💌</button>
+      </form>
+
+      <div class="stay-done" id="stayDone">
+        <p>🎉 Got it — thank you! We'll let you know what's next.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Made for sunny days. ☀️ Check one off today.<br>
+    <a href="/gallery.html" style="color:inherit;">Inspiration</a> ·
+    <a href="/about.html" style="color:inherit;">About</a> ·
+    <a href="/contact.html" style="color:inherit;">Contact</a> ·
+    <a href="/privacy.html" style="color:inherit;">Privacy</a>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   IDEA BANK — authored + tagged for personalization.
+   tags: who[], energy[], budget[], setting[]  ('any' = fits all)
+   cat drives the color + label.
+   ========================================================= */
+const CATS = {
+  adventure:{c:'var(--tang)', tint:'#FFE8D6', label:'Adventure'},
+  water:    {c:'var(--sky)',  tint:'#D8F0FF', label:'Make a splash'},
+  food:     {c:'var(--coral)',tint:'#FFE0E7', label:'Tasty'},
+  creative: {c:'var(--grape)',tint:'#EBE4FF', label:'Creative'},
+  chill:    {c:'var(--lime)', tint:'#DBF6E5', label:'Slow down'},
+  social:   {c:'var(--bubble)',tint:'#FFE2F4', label:'Together'},
+  nature:   {c:'#2FB36A',      tint:'#DCF3DF', label:'Outdoors'},
+  nostalgic:{c:'var(--sun)',   tint:'#FFF0C8', label:'Summer classic'}
+};
+
+const ITEMS = [
+  {t:"Watch the sunrise with coffee and zero plans", e:"🌅", cat:"chill", who:["any"], energy:["chill"], budget:["free"], setting:["any","beach","outdoors"]},
+  {t:"Have a picnic in the park at golden hour", e:"🧺", cat:"chill", who:["any","couple","family","friends"], energy:["chill"], budget:["free"], setting:["outdoors","city","any"]},
+  {t:"Build the world's most ridiculous sandcastle", e:"🏖️", cat:"nostalgic", who:["family","friends","any"], energy:["chill"], budget:["free"], setting:["beach"]},
+  {t:"Go for a midnight swim under the stars", e:"🌊", cat:"water", who:["couple","friends","any"], energy:["adventure"], budget:["free"], setting:["beach","water"]},
+  {t:"Learn to surf (or wipe out trying)", e:"🏄", cat:"water", who:["any","friends","solo"], energy:["adventure"], budget:["splurge"], setting:["beach","water"]},
+  {t:"Make homemade ice cream from scratch", e:"🍦", cat:"food", who:["family","any","couple"], energy:["chill"], budget:["free"], setting:["any"]},
+  {t:"Host a backyard movie night with a projector", e:"🎬", cat:"social", who:["family","friends","couple","any"], energy:["chill"], budget:["free"], setting:["outdoors","any"]},
+  {t:"Catch fireflies at dusk", e:"✨", cat:"nostalgic", who:["family","couple","any"], energy:["chill"], budget:["free"], setting:["outdoors"]},
+  {t:"Take a spontaneous road trip with no destination", e:"🚗", cat:"adventure", who:["friends","couple","any","solo"], energy:["adventure"], budget:["any"], setting:["any","city","outdoors"]},
+  {t:"Visit a farmers market and cook whatever looks good", e:"🍑", cat:"food", who:["any","couple","family"], energy:["chill"], budget:["free"], setting:["city","any"]},
+  {t:"Go stargazing far from the city lights", e:"🌌", cat:"nature", who:["couple","friends","family","any"], energy:["chill"], budget:["free"], setting:["outdoors"]},
+  {t:"Camp under the stars (even in the backyard)", e:"⛺", cat:"nature", who:["family","friends","couple","any"], energy:["adventure"], budget:["free"], setting:["outdoors"]},
+  {t:"Try every flavor at the local ice cream shop", e:"🍨", cat:"food", who:["family","friends","any","couple"], energy:["chill"], budget:["free"], setting:["city","any"]},
+  {t:"Go berry picking and bake a pie", e:"🥧", cat:"food", who:["family","couple","any"], energy:["chill"], budget:["free"], setting:["outdoors"]},
+  {t:"Rent kayaks and paddle somewhere new", e:"🛶", cat:"water", who:["friends","couple","family","any"], energy:["adventure"], budget:["splurge"], setting:["water"]},
+  {t:"Hike to a waterfall and swim underneath it", e:"💦", cat:"nature", who:["friends","couple","any","solo"], energy:["adventure"], budget:["free"], setting:["outdoors","water"]},
+  {t:"Have a water balloon fight like you're 10 again", e:"🎈", cat:"nostalgic", who:["family","friends","any"], energy:["adventure"], budget:["free"], setting:["outdoors"]},
+  {t:"Read a whole book in one lazy afternoon", e:"📖", cat:"chill", who:["solo","any"], energy:["chill"], budget:["free"], setting:["any","beach"]},
+  {t:"Start a tiny herb or flower garden", e:"🌱", cat:"creative", who:["solo","family","any"], energy:["chill"], budget:["free"], setting:["any"]},
+  {t:"Paint or sketch outdoors, badly and happily", e:"🎨", cat:"creative", who:["solo","any","couple"], energy:["chill"], budget:["free"], setting:["outdoors","any"]},
+  {t:"Take a pottery or craft class", e:"🏺", cat:"creative", who:["solo","couple","friends","any"], energy:["chill"], budget:["splurge"], setting:["city"]},
+  {t:"Host a themed dinner party for friends", e:"🍽️", cat:"social", who:["friends","any","couple"], energy:["chill"], budget:["any"], setting:["any","city"]},
+  {t:"Watch a fireworks show from a great spot", e:"🎆", cat:"nostalgic", who:["family","couple","friends","any"], energy:["chill"], budget:["free"], setting:["any","city","beach"]},
+  {t:"Go to an outdoor concert or music festival", e:"🎶", cat:"social", who:["friends","couple","any"], energy:["adventure"], budget:["splurge"], setting:["city","outdoors"]},
+  {t:"Chase down the best taco truck in town", e:"🌮", cat:"food", who:["friends","couple","any","solo"], energy:["chill"], budget:["free"], setting:["city"]},
+  {t:"Take a sunset bike ride", e:"🚲", cat:"chill", who:["any","couple","solo","family"], energy:["chill"], budget:["free"], setting:["city","outdoors","any"]},
+  {t:"Float down a lazy river", e:"🏞️", cat:"water", who:["friends","family","couple","any"], energy:["chill"], budget:["splurge"], setting:["water"]},
+  {t:"Learn to make the perfect homemade pizza", e:"🍕", cat:"food", who:["family","couple","any"], energy:["chill"], budget:["free"], setting:["any"]},
+  {t:"Go on a sunrise hike before it gets hot", e:"🥾", cat:"nature", who:["solo","couple","friends","any"], energy:["adventure"], budget:["free"], setting:["outdoors"]},
+  {t:"Swim in a hidden lake or swimming hole", e:"🏊", cat:"water", who:["friends","couple","family","any"], energy:["adventure"], budget:["free"], setting:["water","outdoors"]},
+  {t:"Have a backyard BBQ that runs till dark", e:"🍔", cat:"social", who:["family","friends","any"], energy:["chill"], budget:["free"], setting:["outdoors","any"]},
+  {t:"Make a summer playlist and dance in the kitchen", e:"💃", cat:"chill", who:["any","solo","couple"], energy:["chill"], budget:["free"], setting:["any"]},
+  {t:"Visit a town you've never been to", e:"🗺️", cat:"adventure", who:["couple","friends","family","any","solo"], energy:["adventure"], budget:["any"], setting:["city","any"]},
+  {t:"Catch a drive-in movie", e:"🎟️", cat:"nostalgic", who:["couple","family","friends","any"], energy:["chill"], budget:["any"], setting:["outdoors","city"]},
+  {t:"Learn to make 3 great summer cocktails (or mocktails)", e:"🍹", cat:"food", who:["couple","friends","any","solo"], energy:["chill"], budget:["any"], setting:["any"]},
+  {t:"Write postcards to people you love", e:"💌", cat:"creative", who:["any","solo"], energy:["chill"], budget:["free"], setting:["any"]},
+  {t:"Go camping and cook everything over a fire", e:"🔥", cat:"nature", who:["family","friends","couple","any"], energy:["adventure"], budget:["any"], setting:["outdoors"]},
+  {t:"Find a rooftop with a view at sunset", e:"🌆", cat:"chill", who:["couple","friends","any","solo"], energy:["chill"], budget:["any"], setting:["city"]},
+  {t:"Try paddleboarding", e:"🏄‍♀️", cat:"water", who:["solo","friends","couple","any"], energy:["adventure"], budget:["splurge"], setting:["water","beach"]},
+  {t:"Press flowers and frame them", e:"🌸", cat:"creative", who:["solo","family","any"], energy:["chill"], budget:["free"], setting:["any","outdoors"]},
+  {t:"Have a long, no-phones beach day", e:"🏝️", cat:"chill", who:["any","couple","family","friends"], energy:["chill"], budget:["free"], setting:["beach"]},
+  {t:"Go fruit-picking and eat half before you leave", e:"🍓", cat:"food", who:["family","couple","any"], energy:["chill"], budget:["free"], setting:["outdoors"]},
+  {t:"Catch a minor-league baseball game", e:"⚾", cat:"social", who:["family","friends","any"], energy:["chill"], budget:["any"], setting:["city"]},
+  {t:"Take a ferry just to be on the water", e:"⛴️", cat:"water", who:["couple","solo","any","family"], energy:["chill"], budget:["any"], setting:["water","city"]},
+  {t:"Make a fort and watch the rain", e:"🌧️", cat:"nostalgic", who:["family","couple","any","solo"], energy:["chill"], budget:["free"], setting:["any"]},
+  {t:"Try an early-morning swim before work", e:"🌞", cat:"water", who:["solo","any","couple"], energy:["adventure"], budget:["free"], setting:["water","beach"]},
+  {t:"Learn one new recipe a week all summer", e:"👩‍🍳", cat:"food", who:["solo","couple","family","any"], energy:["chill"], budget:["free"], setting:["any"]},
+  {t:"Go on a spontaneous day trip to the coast", e:"🚙", cat:"adventure", who:["couple","friends","family","any"], energy:["adventure"], budget:["any"], setting:["beach","water"]},
+  {t:"Set up a hammock and do absolutely nothing", e:"🌴", cat:"chill", who:["solo","couple","any"], energy:["chill"], budget:["free"], setting:["outdoors","any"]},
+  {t:"Have a board-game night that gets competitive", e:"🎲", cat:"social", who:["family","friends","couple","any"], energy:["chill"], budget:["free"], setting:["any"]},
+  {t:"Find the best view in your city and watch the sunset", e:"🌇", cat:"chill", who:["any","couple","solo","friends"], energy:["chill"], budget:["free"], setting:["city"]},
+  {t:"Go snorkeling and meet a fish", e:"🐠", cat:"water", who:["couple","friends","family","any"], energy:["adventure"], budget:["splurge"], setting:["water","beach"]},
+  {t:"Bake something with summer fruit", e:"🫐", cat:"food", who:["family","solo","couple","any"], energy:["chill"], budget:["free"], setting:["any"]},
+  {t:"Visit a botanical garden", e:"🌺", cat:"nature", who:["couple","solo","family","any"], energy:["chill"], budget:["any"], setting:["city","outdoors"]},
+  {t:"Stay up all night and watch the sun come up", e:"🌃", cat:"adventure", who:["friends","couple","any"], energy:["adventure"], budget:["free"], setting:["any"]},
+  {t:"Make a giant batch of lemonade and sell it (just for fun)", e:"🍋", cat:"nostalgic", who:["family","any"], energy:["chill"], budget:["free"], setting:["any"]},
+  {t:"Take a photo every day and make a summer album", e:"📷", cat:"creative", who:["solo","any","couple","family"], energy:["chill"], budget:["free"], setting:["any"]},
+  {t:"Go to a county fair and ride something rickety", e:"🎡", cat:"nostalgic", who:["family","friends","couple","any"], energy:["adventure"], budget:["any"], setting:["any","city"]},
+  {t:"Plan a sunset dinner outdoors", e:"🌅", cat:"food", who:["couple","family","friends","any"], energy:["chill"], budget:["any"], setting:["outdoors"]},
+  {t:"Try wild swimming somewhere beautiful", e:"🏞️", cat:"water", who:["solo","couple","friends","any"], energy:["adventure"], budget:["free"], setting:["water","outdoors"]},
+  {t:"Volunteer for a beach or park cleanup", e:"🌍", cat:"social", who:["family","friends","solo","any"], energy:["chill"], budget:["free"], setting:["beach","outdoors"]},
+  {t:"Learn to juggle, skip stones, or do a cartwheel", e:"🤸", cat:"nostalgic", who:["any","solo","family"], energy:["chill"], budget:["free"], setting:["any","outdoors"]}
+];
+
+/* ---------- state ---------- */
+const filters = {who:'any', energy:'any', budget:'any', setting:'any'};
+let current = []; // {t,e,cat,id,done,size}
+let idCounter = 0;
+let lastImageBlob = null; // cache so native share doesn't have to rebuild (and risk the tap-to-share timing window)
+let listCompletedFired = false;
+
+/* ====== EDIT YOUR BRAND HERE — name + url shown on the shareable image ====== */
+const BRAND = { name: "Have a Great Summer", url: "have-a-great-summer.netlify.app" };
+const GOATCOUNTER_CODE = "have-a-great-summer"; // matches your GoatCounter site code
+document.getElementById('bbName').textContent = BRAND.name;
+document.getElementById('bbUrl').textContent = BRAND.url;
+
+/* ---------- chip selection ---------- */
+document.querySelectorAll('.chips').forEach(group=>{
+  const dim = group.dataset.group;
+  group.querySelectorAll('.chip').forEach(chip=>{
+    chip.addEventListener('click',()=>{
+      group.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+      chip.classList.add('on');
+      filters[dim] = chip.dataset.v;
+    });
+  });
+});
+
+/* ---------- scoring + selection ---------- */
+function matches(arr, val){ return arr.includes(val) || arr.includes('any'); }
+
+// Theme words per category — lets "food" match tacos/pizza/ice cream even
+// though those words don't literally contain "food".
+const THEME_WORDS = {
+  food:    ['food','eat','eating','taste','tasty','cuisine','cook','cooking','bake','baking','restaurant','snack','meal','dinner','brunch','culinary','foodie'],
+  water:   ['water','swim','swimming','ocean','beach','lake','pool','surf','surfing','splash','wet','sea'],
+  nature:  ['nature','outdoor','outdoors','hike','hiking','camp','camping','forest','wildlife','stars','mountain'],
+  creative:['creative','art','craft','paint','painting','draw','write','writing','make','making','diy','photo','photography'],
+  social:  ['social','friend','friends','party','together','people','group','host','hosting'],
+  chill:   ['chill','relax','relaxing','rest','calm','slow','lazy','peaceful','quiet','cozy'],
+  adventure:['adventure','adventurous','explore','exploring','new','spontaneous','road trip','travel'],
+  nostalgic:['nostalgic','nostalgia','childhood','classic','retro','throwback']
+};
+
+function detectDominantTheme(vibeWords){
+  if(!vibeWords.length) return null;
+  let best=null, bestCount=0;
+  for(const cat in THEME_WORDS){
+    const words = THEME_WORDS[cat];
+    const count = vibeWords.filter(w=>words.some(tw=>tw.includes(w)||w.includes(tw))).length;
+    if(count>bestCount){ bestCount=count; best=cat; }
+  }
+  return bestCount>0 ? best : null;
+}
+
+function scoreItem(item, vibeWords){
+  let s = 1 + Math.random()*1.6; // base + jitter for variety
+  ['who','energy','budget','setting'].forEach(dim=>{
+    const v = filters[dim];
+    if(v==='any') return;
+    if(item[dim].includes(v)) s += 2.2;
+    else if(item[dim].includes('any')) s += 0.4;
+    else s -= 1.4; // wrong fit, push down
+  });
+  if(vibeWords.length){
+    const hay = (item.t + ' ' + item.cat + ' ' + item['setting'].join(' ')).toLowerCase();
+    vibeWords.forEach(w=>{ if(w.length>2 && hay.includes(w)) s += 3; });
+    // theme match: vibe word relates to this item's category, even via synonym
+    const catWords = THEME_WORDS[item.cat] || [];
+    vibeWords.forEach(w=>{
+      if(w.length>2 && catWords.some(tw=>tw.includes(w)||w.includes(tw))) s += 2.6;
+    });
+  }
+  return s;
+}
+
+function generate(){
+  const vibe = document.getElementById('vibe').value.toLowerCase();
+  const vibeWords = vibe.split(/[\s,]+/).filter(Boolean);
+  const dominant = detectDominantTheme(vibeWords);
+  const scored = ITEMS.map(it=>({it, s:scoreItem(it, vibeWords)})).sort((a,b)=>b.s-a.s);
+
+  // category diversity cap — normally max 2 per category, but if the vibe
+  // clearly points at one theme, let that one category take more slots.
+  const picked = []; const catCount = {};
+  for(const {it} of scored){
+    const cap = (catCount[it.cat]||0);
+    const limit = (dominant && it.cat===dominant) ? 5 : 2;
+    if(cap >= limit) continue;
+    catCount[it.cat] = cap+1;
+    picked.push(it);
+    if(picked.length>=11) break;
+  }
+  // if somehow short, top up ignoring caps
+  if(picked.length<9){
+    for(const {it} of scored){ if(!picked.includes(it)){ picked.push(it); if(picked.length>=11) break; } }
+  }
+
+  const own = current.filter(c=>c.source==='own');
+  const gen = picked.map(it=>({...it, id:++idCounter, done:false, source:'gen'}));
+  current = [...gen, ...own];
+  assignSizes();
+  renderTitle();
+  renderGrid();
+  document.getElementById('results').classList.add('show');
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function assignSizes(){
+  // first card big, a couple wide, rest normal — bento feel
+  current.forEach((c,i)=>{
+    if(i===0) c.size='big';
+    else if(i===3 || i===6) c.size='wide';
+    else c.size='';
+  });
+}
+
+/* ---------- render ---------- */
+function renderTitle(){
+  const name = document.getElementById('name').value.trim();
+  const title = name ? `${name}'s Summer 2026 Bucket List` : 'My Summer 2026 Bucket List';
+  document.getElementById('listTitle').textContent = title;
+}
+
+/* ====================================================================
+   SHAREABLE SAVE-LINK
+   The entire list (title + items + checked state) is encoded into the
+   URL itself, so "saving" is just bookmarking or copying the address —
+   no account, no server. Opening that link later restores the list.
+==================================================================== */
+function b64urlEncode(str){
+  const b64 = btoa(unescape(encodeURIComponent(str)));
+  return b64.replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function b64urlDecode(b64url){
+  let b64 = b64url.replace(/-/g,'+').replace(/_/g,'/');
+  while(b64.length % 4) b64 += '=';
+  return decodeURIComponent(escape(atob(b64)));
+}
+
+function syncUrl(){
+  if(!current.length){
+    history.replaceState(null, '', location.pathname);
+    return;
+  }
+  const obj = {
+    t: document.getElementById('listTitle').textContent,
+    i: current.map(c=>({ t:c.t, e:c.e, c:c.cat, d:c.done?1:0 }))
+  };
+  const code = b64urlEncode(JSON.stringify(obj));
+  history.replaceState(null, '', location.pathname + '?list=' + code);
+}
+
+function tryRestoreFromUrl(){
+  const code = new URLSearchParams(location.search).get('list');
+  if(!code) return false;
+  try{
+    const obj = JSON.parse(b64urlDecode(code));
+    if(!obj || !Array.isArray(obj.i) || !obj.i.length) return false;
+    current = obj.i.map(it=>({ t:it.t, e:it.e, cat:it.c, done:!!it.d, id:++idCounter, source:'own' }));
+    assignSizes();
+    document.getElementById('listTitle').textContent = obj.t || 'My Summer 2026 Bucket List';
+    renderGrid();
+    document.getElementById('results').classList.add('show');
+    if(window.goatcounter && window.goatcounter.count){
+      window.goatcounter.count({path:'list-restored-from-link', title:'List restored from link', event:true});
+    }
+    return true;
+  }catch(e){ return false; }
+}
+
+function renderGrid(){
+  lastImageBlob = null; // list changed — any cached image is now stale
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  current.forEach(c=>{
+    const cat = CATS[c.cat];
+    const el = document.createElement('div');
+    el.className = 'card ' + (c.size||'') + (c.done?' done':'');
+    el.style.setProperty('--cardbg', cat.tint);
+    el.style.setProperty('--accent', cat.c);
+    el.dataset.id = c.id;
+    el.innerHTML = `
+      <div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="emoji">${c.e}</div>
+      <div>
+        <div class="txt">${c.t}</div>
+        <div class="cat">${cat.label}</div>
+      </div>
+      <button class="remove" title="Remove from list">×</button>
+      <button class="swap" title="Swap for another idea">↻</button>`;
+    el.addEventListener('click', e=>{
+      if(e.target.closest('.swap') || e.target.closest('.remove')) return;
+      toggleDone(c.id, el);
+    });
+    el.querySelector('.swap').addEventListener('click', e=>{ e.stopPropagation(); swapItem(c.id); });
+    el.querySelector('.remove').addEventListener('click', e=>{ e.stopPropagation(); removeItem(c.id); });
+    grid.appendChild(el);
+  });
+
+  // add-your-own card
+  const add = document.createElement('div');
+  add.className = 'addcard';
+  add.innerHTML = '＋ add your own';
+  add.addEventListener('click', addOwn);
+  grid.appendChild(add);
+
+  updateProgress();
+  syncUrl();
+}
+
+function toggleDone(id, el){
+  const c = current.find(x=>x.id===id); if(!c) return;
+  c.done = !c.done;
+  el.classList.toggle('done', c.done);
+  lastImageBlob = null; // visual changed — cached image is now stale
+  if(c.done){
+    const r = el.getBoundingClientRect();
+    burst(r.left + r.width/2, r.top + r.height/2, CATS[c.cat].c);
+  }
+  updateProgress();
+  syncUrl();
+}
+
+function swapItem(id){
+  const idx = current.findIndex(x=>x.id===id); if(idx<0) return;
+  const usedTexts = new Set(current.map(c=>c.t));
+  const vibeWords = document.getElementById('vibe').value.toLowerCase().split(/[\s,]+/).filter(Boolean);
+  const pool = ITEMS.filter(it=>!usedTexts.has(it.t))
+                    .map(it=>({it,s:scoreItem(it,vibeWords)})).sort((a,b)=>b.s-a.s);
+  if(!pool.length) return;
+  const choice = pool[Math.floor(Math.random()*Math.min(5,pool.length))].it;
+  current[idx] = {...choice, id:++idCounter, done:false, size:current[idx].size, source:'gen'};
+  renderGrid();
+}
+
+function removeItem(id){
+  current = current.filter(c=>c.id!==id);
+  assignSizes();
+  renderGrid();
+}
+
+function addOwn(){
+  const txt = prompt("What do you want to add to your summer?");
+  if(!txt || !txt.trim()) return;
+  current.push({t:txt.trim(), e:guessEmoji(txt), cat:guessCat(txt), id:++idCounter, done:false, size:'', source:'own'});
+  renderGrid();
+}
+
+function updateProgress(){
+  const done = current.filter(c=>c.done).length;
+  const total = current.length;
+  const pct = total? Math.round(done/total*100):0;
+  document.getElementById('barFill').style.width = pct+'%';
+  document.getElementById('progLabel').textContent = `${done} of ${total} done` + (done===total && total>0 ? ' — legend! 🎉' : '');
+  if(done===total && total>0){
+    bigBurst();
+    if(!listCompletedFired && window.goatcounter && window.goatcounter.count){
+      window.goatcounter.count({path:'list-completed', title:'List completed', event:true});
+      listCompletedFired = true;
+    }
+  } else {
+    listCompletedFired = false;
+  }
+}
+
+/* ---------- title live update from name ---------- */
+document.getElementById('name').addEventListener('input', ()=>{ if(current.length) renderTitle(); });
+
+/* ---------- confetti ---------- */
+const cv = document.getElementById('confetti');
+const ctx = cv.getContext('2d');
+let parts = [];
+function resize(){ cv.width=innerWidth; cv.height=innerHeight; }
+resize(); addEventListener('resize', resize);
+const palette = ['#FF5A7A','#FF8A3D','#FFC23C','#37C97A','#3CB4FF','#8B6CF0','#FF73C7'];
+function burst(x,y,color){
+  for(let i=0;i<26;i++){
+    parts.push({x,y,vx:(Math.random()-.5)*9,vy:(Math.random()-1.1)*9,g:.32,
+      s:5+Math.random()*6, c: Math.random()<.5?color.replace('var(--','').replace(')','') && color : palette[Math.floor(Math.random()*palette.length)],
+      life:60+Math.random()*30, rot:Math.random()*6, vr:(Math.random()-.5)*.4});
+  }
+}
+function bigBurst(){ for(let k=0;k<6;k++){ setTimeout(()=>burst(innerWidth*Math.random(), innerHeight*0.3, palette[k%palette.length]), k*90); } }
+function tick(){
+  ctx.clearRect(0,0,cv.width,cv.height);
+  parts.forEach(p=>{ p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.life--; });
+  parts = parts.filter(p=>p.life>0 && p.y<cv.height+40);
+  parts.forEach(p=>{
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+    ctx.fillStyle = (typeof p.c==='string' && p.c.startsWith('#'))? p.c : '#FF8A3D';
+    ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.6); ctx.restore();
+  });
+  requestAnimationFrame(tick);
+}
+tick();
+
+/* ---------- actions ---------- */
+function showToast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1900);
+}
+
+document.getElementById('genBtn').addEventListener('click', generate);
+
+/* ---------- mode toggle ---------- */
+document.querySelectorAll('.modetab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.modetab').forEach(t=>t.classList.remove('on'));
+    tab.classList.add('on');
+    const m=tab.dataset.mode;
+    document.getElementById('mode-inspire').hidden = (m!=='inspire');
+    document.getElementById('mode-own').hidden = (m!=='own');
+  });
+});
+
+/* ---------- emoji + category guessing for typed items ---------- */
+const EMOJI_MAP=[ [/(sunrise|sunset|golden)/,'🌅'],[/(beach|sand|shore)/,'🏖️'],[/(swim|pool|dive)/,'🏊'],[/(surf)/,'🏄'],[/(kayak|paddle|canoe|raft)/,'🛶'],[/(boat|sail|ferry|cruise)/,'⛵'],[/(hike|trail|mountain|climb)/,'🥾'],[/(camp|tent)/,'⛺'],[/(star|galaxy|stargaz)/,'🌌'],[/(fire|bonfire|smore)/,'🔥'],[/(bike|cycle|cycling)/,'🚲'],[/(road ?trip|drive)/,'🚗'],[/(ice cream|gelato)/,'🍦'],[/(pizza)/,'🍕'],[/(taco)/,'🌮'],[/(bbq|barbecue|grill|burger)/,'🍔'],[/(coffee|cafe|café)/,'☕'],[/(eat|food|dinner|restaurant|brunch|cook|bake)/,'🍴'],[/(berry|berries|fruit|peach|cherry)/,'🍓'],[/(picnic)/,'🧺'],[/(cocktail|lemonade|drink)/,'🍹'],[/(read|book)/,'📖'],[/(paint|draw|art|sketch)/,'🎨'],[/(photo|picture|camera)/,'📷'],[/(music|concert|festival|sing|dance)/,'🎶'],[/(movie|film|cinema)/,'🎬'],[/(garden|plant|flower|grow)/,'🌱'],[/(fish)/,'🎣'],[/(travel|trip|visit|explore|city|town)/,'🗺️'],[/(write|journal|letter|postcard)/,'💌'],[/(firework)/,'🎆'],[/(yoga|run|workout|gym)/,'🧘'],[/(friend|party|gather|host)/,'🥳'],[/(love|date|romantic|kiss)/,'💕'] ];
+const CAT_KEYS=Object.keys(CATS);
+function guessEmoji(t){ const s=t.toLowerCase(); for(const [re,em] of EMOJI_MAP){ if(re.test(s)) return em; } return '⭐'; }
+function guessCat(t){ const s=t.toLowerCase();
+  if(/(swim|surf|kayak|paddle|boat|sail|water|ocean|lake|river|snorkel|pool)/.test(s)) return 'water';
+  if(/(eat|food|ice cream|pizza|taco|bbq|cook|bake|fruit|berry|picnic|cocktail|drink|coffee|dinner)/.test(s)) return 'food';
+  if(/(paint|draw|art|write|photo|garden|plant|craft|make|create|build|sketch|journal)/.test(s)) return 'creative';
+  if(/(hike|camp|mountain|trail|star|nature|outdoor|forest|wildlife|sunrise|sunset)/.test(s)) return 'nature';
+  if(/(friend|party|host|concert|festival|game|together|dinner party|dance)/.test(s)) return 'social';
+  if(/(read|rest|relax|nap|chill|slow|hammock|lazy|nothing|book)/.test(s)) return 'chill';
+  if(/(road ?trip|travel|trip|visit|explore|adventure|new|drive)/.test(s)) return 'adventure';
+  return CAT_KEYS[Math.floor(Math.random()*CAT_KEYS.length)];
+}
+
+/* ---------- write-your-own list ---------- */
+function makeOwnList(){
+  const raw=document.getElementById('ownText').value;
+  const lines=raw.split('\n').map(s=>s.trim()).filter(Boolean);
+  if(!lines.length){ showToast('Type a few things first ✏️'); return; }
+  const own=lines.map(t=>({t, e:guessEmoji(t), cat:guessCat(t), id:++idCounter, done:false, source:'own'}));
+  current=[...current, ...own];
+  assignSizes(); renderTitle(); renderGrid();
+  document.getElementById('ownText').value='';
+  document.getElementById('results').classList.add('show');
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+document.getElementById('ownBtn').addEventListener('click', makeOwnList);
+
+/* ====================================================================
+   FEEDBACK / EMAIL CAPTURE
+   1. Create a free form at https://formspree.io (a NEW form — ideally
+      in its own account, separate from any other project's Formspree
+      account, since the free tier's 50/month cap is shared across ALL
+      forms in one account).
+   2. Paste your endpoint below, replacing YOUR_FORM_ID.
+   3. Until then this runs in DEMO mode and just shows the thank-you state.
+==================================================================== */
+const FEEDBACK_ENDPOINT = "https://formspree.io/f/xnjyeozz";
+const feedbackIsDemo = FEEDBACK_ENDPOINT.includes("YOUR_FORM_ID");
+
+function validEmail(v){ return v==='' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+document.getElementById('stayForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const form = e.target;
+  const email = document.getElementById('stayEmail').value.trim();
+  const feedback = document.getElementById('stayFeedback').value.trim();
+  const errBox = document.getElementById('stayErr');
+  errBox.textContent = '';
+
+  if(!email && !feedback){
+    errBox.textContent = "Add an email or a note before sending — whichever you'd like to share.";
+    return;
+  }
+  if(!validEmail(email)){
+    errBox.textContent = "That email doesn't look quite right — mind checking it?";
+    document.getElementById('stayEmail').focus();
+    return;
+  }
+
+  const btn = form.querySelector('.stay-btn');
+  const original = btn.textContent;
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+
+  try{
+    if(!feedbackIsDemo){
+      const res = await fetch(FEEDBACK_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      });
+      if(!res.ok) throw new Error('network');
+    } else {
+      await new Promise(r=>setTimeout(r, 500));
+      console.log('[feedback] demo capture:', { email, feedback });
+    }
+    form.style.display = 'none';
+    document.getElementById('stayDone').classList.add('show');
+  }catch(err){
+    errBox.textContent = "Couldn't send that just now — please try again in a moment.";
+    btn.textContent = original;
+    btn.disabled = false;
+  }
+});
+document.getElementById('regenBtn').addEventListener('click', ()=>{
+  current = [];
+  syncUrl(); // clears the ?list= param since current is now empty
+  document.getElementById('vibe').value = '';
+  document.getElementById('ownText').value = '';
+  document.getElementById('results').classList.remove('show');
+  document.querySelectorAll('.chips').forEach(group=>{
+    const dim = group.dataset.group;
+    group.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+    group.querySelector('.chip').classList.add('on'); // first chip = "any" default
+    filters[dim] = group.querySelector('.chip').dataset.v;
+  });
+  document.getElementById('panel').scrollIntoView({behavior:'smooth'});
+});
+
+document.getElementById('printBtn').addEventListener('click', ()=>window.print());
+
+/* Invite a friend to the TOOL itself — separate from sharing your own
+   list. Just a link + a short pitch, so the plain Web Share API (no
+   files) works almost everywhere, and there's no app-interception risk
+   since we're not hard-coding a specific platform's link. */
+document.getElementById('inviteBtn').addEventListener('click', async ()=>{
+  const url = 'https://' + BRAND.url + '/';
+  const pitch = `Make your own summer bucket list — it's free, cute, and kind of addictive ☀️`;
+  try{
+    if(navigator.share){
+      await navigator.share({ title: BRAND.name, text: pitch, url });
+      return;
+    }
+    await navigator.clipboard.writeText(`${pitch}\n${url}`);
+    showToast('Copied! Paste it anywhere 📋');
+  }catch(e){
+    if(e && e.name === 'AbortError') return; // closed the share sheet on purpose
+    showToast("Couldn't share that just now — try again in a moment");
+  }
+});
+
+function shareText(){
+  const title = document.getElementById('listTitle').textContent;
+  const lines = current.map(c=>`${c.done?'[x]':'[ ]'} ${c.t}`).join('\n');
+  return `${title}\n\n${lines}\n\nMade with ${BRAND.name} ☀️ ${BRAND.url}`;
+}
+
+async function buildShareImage(){
+  const node = document.getElementById('capture');
+  node.classList.add('exporting');
+  try{
+    const canvas = await html2canvas(node, {backgroundColor:'#FFF7EC', scale:2, useCORS:true});
+    return await new Promise(res=>canvas.toBlob(res, 'image/png'));
+  } finally {
+    node.classList.remove('exporting');
+  }
+}
+
+document.getElementById('shareImgBtn').addEventListener('click', async ()=>{
+  try{
+    let blob = lastImageBlob;
+    if(!blob){
+      // No cached image yet — building one takes a moment, which on some
+      // phones can run past the window where share is still allowed.
+      showToast('Preparing your image…');
+      blob = await buildShareImage();
+      lastImageBlob = blob;
+    }
+    const file = new File([blob], 'my-summer-bucket-list.png', {type:'image/png'});
+    const title = document.getElementById('listTitle').textContent;
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], title, text: shareText()});
+      return;
+    }
+    if(navigator.share){
+      await navigator.share({title, text: shareText()});
+      return;
+    }
+    // No share API available at all (most desktop browsers) — graceful fallback
+    await navigator.clipboard.writeText(shareText());
+    showToast("Sharing isn't available in this browser — copied your list as text instead 📋");
+  }catch(e){
+    if(e && e.name === 'AbortError') return; // person closed the share sheet on purpose — totally fine
+    showToast("Couldn't open share — try 'Save as image' first, then share it from Photos");
+  }
+});
+
+document.getElementById('imgBtn').addEventListener('click', ()=>{
+  const node = document.getElementById('capture');
+  showToast('Building your image…');
+  node.classList.add('exporting');
+  html2canvas(node, {backgroundColor:'#FFF7EC', scale:2, useCORS:true}).then(canvas=>{
+    node.classList.remove('exporting');
+    canvas.toBlob(blob=>{ lastImageBlob = blob; }, 'image/png'); // cache for native share too
+    const link=document.createElement('a');
+    link.download='my-summer-bucket-list.png';
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+    showToast('Saved! Share it on your story 📸');
+  }).catch(()=>{ node.classList.remove('exporting'); showToast("Couldn't make the image — try Print instead"); });
+});
+
+/* enter key on vibe triggers generate */
+document.getElementById('vibe').addEventListener('keydown', e=>{ if(e.key==='Enter') generate(); });
+
+document.getElementById('saveLinkBtn').addEventListener('click', async ()=>{
+  syncUrl(); // make sure the URL reflects the very latest state before copying
+  try{
+    await navigator.clipboard.writeText(location.href);
+    showToast('Link copied! Bookmark it or send it to yourself 🔗');
+  }catch(e){
+    showToast('Press and hold the address bar to copy the link');
+  }
+});
+
+/* If this page was opened from a save-link, restore that list instead of
+   showing the empty form. Runs once, at the end of setup. */
+tryRestoreFromUrl();
+
+/* ====================================================================
+   COUNTDOWN — pure date math, no backend.
+==================================================================== */
+function updateCountdown(){
+  const target = new Date('2026-09-22T00:00:00');
+  const now = new Date();
+  const days = Math.max(0, Math.ceil((target - now) / 86400000));
+  const el = document.getElementById('countdownText');
+  if(days === 0) el.textContent = '☀️ Today is the last day of summer!';
+  else el.textContent = `☀️ ${days} day${days===1?'':'s'} of summer left`;
+}
+updateCountdown();
+
+/* ====================================================================
+   LIVE VISITOR COUNT — uses GoatCounter's public counter endpoint.
+   Requires "Allow adding visitor counts on your website" to be turned
+   on in GoatCounter → Settings. No API key involved; this endpoint is
+   designed to be safe to call from a public page.
+==================================================================== */
+fetch(`https://${GOATCOUNTER_CODE}.goatcounter.com/counter/${encodeURIComponent('/')}.json`)
+  .then(r => r.ok ? r.json() : Promise.reject())
+  .then(data => {
+    const n = data.count_unique || data.count;
+    if(n){
+      document.getElementById('visitorCount').textContent =
+        `${Number(n).toLocaleString()} lists started so far`;
+    }
+  })
+  .catch(()=>{ /* quietly hide if the counter isn't enabled yet */ });
+</script>
+</body>
+</html>

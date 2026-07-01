@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Inspiration Gallery — Have a Great Summer</title>
+<meta name="description" content="Real summer bucket list ideas across different vibes — beach days, road trips, cozy summers, and more." />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2C2350; --ink-soft:#6A6190;
+    --coral:#FF5A7A; --tang:#FF8A3D; --sun:#FFC23C; --lime:#37C97A; --sky:#3CB4FF; --grape:#8B6CF0; --bubble:#FF73C7;
+    --display:'Fredoka',system-ui,sans-serif; --body:'Nunito',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;font-family:var(--body);color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 12% -8%, #FFE6B8 0%, transparent 55%),
+      radial-gradient(1000px 600px at 100% 0%, #FFC7DE 0%, transparent 50%),
+      radial-gradient(900px 700px at 50% 120%, #BDEBC9 0%, transparent 55%),
+      #FFF7EC;
+    min-height:100vh;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px;}
+  .topbar{display:flex;align-items:center;justify-content:space-between;max-width:1000px;margin:0 auto;padding:26px 20px;flex-wrap:wrap;gap:10px;}
+  .nav-links{display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
+  .nav-links a{font-family:var(--display);font-weight:600;font-size:14px;color:var(--ink-soft);text-decoration:none;transition:color .15s;}
+  .nav-links a:hover{color:var(--grape);}
+  .nav-links a.current{color:var(--coral);}
+  @media(max-width:480px){ .topbar{justify-content:center;text-align:center;} .nav-links{justify-content:center;width:100%;} }
+  .brand{font-family:var(--display);font-weight:700;font-size:17px;color:var(--ink);text-decoration:none;}
+  .topbar a.back{font-family:var(--display);font-weight:600;font-size:14px;color:var(--grape);text-decoration:none;}
+
+  header.hero{text-align:center;padding:14px 0 36px;}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,6vw,58px);letter-spacing:-.01em;margin:0;}
+  h1 .pop{color:var(--coral);}
+  .tagline{font-size:18px;color:var(--ink-soft);font-weight:600;max-width:42ch;margin:14px auto 0;}
+
+  .persona{
+    margin:0 0 44px;border:3px dashed rgba(44,35,80,.18);border-radius:26px;
+    padding:26px clamp(18px,3vw,28px);background:rgba(255,255,255,.35);
+  }
+  .persona-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap;}
+  .persona-id{display:flex;align-items:center;gap:14px;}
+  .persona-emoji{font-size:36px;line-height:1;}
+  .persona-title{font-family:var(--display);font-weight:700;font-size:26px;margin:0;}
+  .persona-sub{font-size:14px;color:var(--ink-soft);font-weight:700;margin:2px 0 0;}
+  .use-btn{
+    font-family:var(--display);font-weight:700;font-size:14px;color:#fff;text-decoration:none;white-space:nowrap;
+    background:linear-gradient(95deg,var(--coral),var(--grape));padding:11px 20px;border-radius:13px;
+    box-shadow:0 10px 22px -8px rgba(255,90,122,.5);transition:transform .12s ease;
+  }
+  .use-btn:hover{transform:translateY(-2px);}
+
+  .mini-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:12px;}
+  .mini-card{
+    background:var(--tint,#fff);border-radius:16px;padding:14px 12px;min-height:96px;
+    display:flex;flex-direction:column;justify-content:space-between;
+  }
+  .mini-card .e{font-size:24px;}
+  .mini-card .t{font-family:var(--display);font-weight:600;font-size:12.5px;line-height:1.2;color:var(--ink);}
+
+  .cta-band{
+    margin:50px 0 10px;background:var(--ink);border-radius:24px;padding:clamp(30px,5vw,48px);text-align:center;
+  }
+  .cta-band h2{font-family:var(--display);font-weight:700;color:#fff;font-size:clamp(24px,4vw,34px);margin:0 0 16px;}
+  .cta-band a{display:inline-block;font-family:var(--display);font-weight:700;font-size:17px;color:var(--ink);text-decoration:none;background:#fff;padding:15px 30px;border-radius:14px;}
+
+  footer{text-align:center;padding:30px 0 50px;color:var(--ink-soft);font-weight:600;font-size:13px;}
+
+  @media(max-width:480px){
+    .persona-head{flex-direction:column;align-items:flex-start;}
+    .use-btn{width:100%;text-align:center;}
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="/">☀️ Have a Great Summer</a>
+  <nav class="nav-links">
+    <a href="/">Home</a>
+    <a href="/gallery.html" class="current">Inspiration</a>
+    <a href="/about.html">About</a>
+    <a href="/contact.html">Contact</a>
+  </nav>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <h1>Real Summers, <span class="pop">Real Lists</span></h1>
+    <p class="tagline">Every summer looks different. Here's some inspiration from a few different vibes — use one as-is, or make your own below.</p>
+  </header>
+
+  <!-- 1: Beach Girl Summer — 5 items -->
+  <section class="persona">
+    <div class="persona-head">
+      <div class="persona-id">
+        <span class="persona-emoji">🏖️</span>
+        <div><p class="persona-title">Beach Girl Summer</p><p class="persona-sub">golden hour, ice cream, no plans</p></div>
+      </div>
+      <a class="use-btn" href="/?list=eyJ0IjoiQmVhY2ggR2lybCBTdW1tZXIgQnVja2V0IExpc3QiLCJpIjpbeyJ0IjoiU3VucmlzZSBjb2ZmZWUgb24gdGhlIHNhbmQiLCJlIjoi8J-MhSIsImMiOiJjaGlsbCIsImQiOjB9LHsidCI6IlRyeSBldmVyeSBpY2UgY3JlYW0gZmxhdm9yIGluIHRvd24iLCJlIjoi8J-NpiIsImMiOiJmb29kIiwiZCI6MH0seyJ0IjoiU3dpbSB0aWxsIHRoZSBzdW4gZ29lcyBkb3duIiwiZSI6IvCfj4oiLCJjIjoid2F0ZXIiLCJkIjowfSx7InQiOiJHb2xkZW4gaG91ciBwaG90b3MsIG5vIGZpbHRlciIsImUiOiLwn5O3IiwiYyI6ImNyZWF0aXZlIiwiZCI6MH0seyJ0IjoiU3Vuc2V0IHBpY25pYywgYmFyZSBmZWV0IiwiZSI6IvCfp7oiLCJjIjoiY2hpbGwiLCJkIjowfV19">Use this list →</a>
+    </div>
+    <div class="mini-grid">
+      <div class="mini-card" style="--tint:#DBF6E5"><span class="e">🌅</span><span class="t">Sunrise coffee on the sand</span></div>
+      <div class="mini-card" style="--tint:#FFE0E7"><span class="e">🍦</span><span class="t">Try every ice cream flavor in town</span></div>
+      <div class="mini-card" style="--tint:#D8F0FF"><span class="e">🏊</span><span class="t">Swim till the sun goes down</span></div>
+      <div class="mini-card" style="--tint:#EBE4FF"><span class="e">📷</span><span class="t">Golden hour photos, no filter</span></div>
+      <div class="mini-card" style="--tint:#DBF6E5"><span class="e">🧺</span><span class="t">Sunset picnic, bare feet</span></div>
+    </div>
+  </section>
+
+  <!-- 2: Dad Summer — 7 items -->
+  <section class="persona">
+    <div class="persona-head">
+      <div class="persona-id">
+        <span class="persona-emoji">🔥</span>
+        <div><p class="persona-title">Dad Summer</p><p class="persona-sub">grill, lawn games, one good nap</p></div>
+      </div>
+      <a class="use-btn" href="/?list=eyJ0IjoiRGFkIFN1bW1lciBCdWNrZXQgTGlzdCIsImkiOlt7InQiOiJNYXN0ZXIgdGhlIHBlcmZlY3QgYmFja3lhcmQgYnVyZ2VyIiwiZSI6IvCfjZQiLCJjIjoiZm9vZCIsImQiOjB9LHsidCI6IkdvIGZpc2hpbmcgYXQgc3VucmlzZSIsImUiOiLwn46jIiwiYyI6Im5hdHVyZSIsImQiOjB9LHsidCI6IldpbiB0aGUgY29ybmhvbGUgcmVtYXRjaCIsImUiOiLwn4-QIiwiYyI6InNvY2lhbCIsImQiOjB9LHsidCI6IkdldCB0aGUgYm9hdCBvdXQgKGZpbmFsbHkpIiwiZSI6IvCfmqQiLCJjIjoid2F0ZXIiLCJkIjowfSx7InQiOiJPbmUgdW5pbnRlcnJ1cHRlZCBoYW1tb2NrIG5hcCIsImUiOiLwn5i0IiwiYyI6ImNoaWxsIiwiZCI6MH0seyJ0IjoiV2F0Y2ggZmlyZXdvcmtzIHdpdGggdGhlIGZhbWlseSIsImUiOiLwn46GIiwiYyI6Im5vc3RhbGdpYyIsImQiOjB9LHsidCI6IkZpbmFsbHkgZml4IHRoYXQgdGhpbmcgaW4gdGhlIGdhcmFnZSIsImUiOiLwn5ug77iPIiwiYyI6ImFkdmVudHVyZSIsImQiOjB9XX0=">Use this list →</a>
+    </div>
+    <div class="mini-grid">
+      <div class="mini-card" style="--tint:#FFE0E7"><span class="e">🍔</span><span class="t">Master the perfect backyard burger</span></div>
+      <div class="mini-card" style="--tint:#DCF3DF"><span class="e">🎣</span><span class="t">Go fishing at sunrise</span></div>
+      <div class="mini-card" style="--tint:#FFE2F4"><span class="e">🏐</span><span class="t">Win the cornhole rematch</span></div>
+      <div class="mini-card" style="--tint:#D8F0FF"><span class="e">🚤</span><span class="t">Get the boat out (finally)</span></div>
+      <div class="mini-card" style="--tint:#DBF6E5"><span class="e">😴</span><span class="t">One uninterrupted hammock nap</span></div>
+      <div class="mini-card" style="--tint:#FFF0C8"><span class="e">🎆</span><span class="t">Watch fireworks with the family</span></div>
+      <div class="mini-card" style="--tint:#FFE8D6"><span class="e">🛠️</span><span class="t">Finally fix that thing in the garage</span></div>
+    </div>
+  </section>
+
+  <!-- 3: Broke College Summer — 4 items -->
+  <section class="persona">
+    <div class="persona-head">
+      <div class="persona-id">
+        <span class="persona-emoji">📚</span>
+        <div><p class="persona-title">Broke College Summer</p><p class="persona-sub">free, cheap, and somehow still iconic</p></div>
+      </div>
+      <a class="use-btn" href="/?list=eyJ0IjoiQnJva2UgQ29sbGVnZSBTdW1tZXIgQnVja2V0IExpc3QiLCJpIjpbeyJ0IjoiRnJlZSBjb25jZXJ0IGluIHRoZSBwYXJrIiwiZSI6IvCfjLMiLCJjIjoic29jaWFsIiwiZCI6MH0seyJ0IjoiRmluZCB0aGUgY2hlYXBlc3QsIGJlc3QgdGFjb3MiLCJlIjoi8J-MriIsImMiOiJmb29kIiwiZCI6MH0seyJ0IjoiTGlicmFyeSBBQyArIGEgZ29vZCBib29rIiwiZSI6IvCfk5YiLCJjIjoiY2hpbGwiLCJkIjowfSx7InQiOiJCaWtlIHNvbWV3aGVyZSB5b3UgaGF2ZSBuZXZlciBiZWVuIiwiZSI6IvCfmrIiLCJjIjoiYWR2ZW50dXJlIiwiZCI6MH1dfQ==">Use this list →</a>
+    </div>
+    <div class="mini-grid">
+      <div class="mini-card" style="--tint:#FFE2F4"><span class="e">🌳</span><span class="t">Free concert in the park</span></div>
+      <div class="mini-card" style="--tint:#FFE0E7"><span class="e">🌮</span><span class="t">Find the cheapest, best tacos</span></div>
+      <div class="mini-card" style="--tint:#DBF6E5"><span class="e">📖</span><span class="t">Library AC + a good book</span></div>
+      <div class="mini-card" style="--tint:#FFE8D6"><span class="e">🚲</span><span class="t">Bike somewhere you've never been</span></div>
+    </div>
+  </section>
+
+  <!-- 4: Family Road Trip — 8 items -->
+  <section class="persona">
+    <div class="persona-head">
+      <div class="persona-id">
+        <span class="persona-emoji">🚐</span>
+        <div><p class="persona-title">Family Road Trip Summer</p><p class="persona-sub">snacks, parks, the license plate game</p></div>
+      </div>
+      <a class="use-btn" href="/?list=eyJ0IjoiRmFtaWx5IFJvYWQgVHJpcCBCdWNrZXQgTGlzdCIsImkiOlt7InQiOiJDYW1wIHNvbWV3aGVyZSB3aXRoIHJlYWwgc3RhcnMiLCJlIjoi4pu6IiwiYyI6Im5hdHVyZSIsImQiOjB9LHsidCI6IlBpY2sgYSB0b3duIG9mZiB0aGUgbWFwIGF0IHJhbmRvbSIsImUiOiLwn5e677iPIiwiYyI6ImFkdmVudHVyZSIsImQiOjB9LHsidCI6IlN0b3AgZm9yIGZydWl0IGF0IGV2ZXJ5IGZhcm0gc3RhbmQiLCJlIjoi8J-NkyIsImMiOiJmb29kIiwiZCI6MH0seyJ0IjoiSGlrZSB0byBhIHdhdGVyZmFsbCB0b2dldGhlciIsImUiOiLwn4-e77iPIiwiYyI6Im5hdHVyZSIsImQiOjB9LHsidCI6IkJ1aWxkIHRoZSB1bHRpbWF0ZSByb2FkIHRyaXAgcGxheWxpc3QiLCJlIjoi8J-OtiIsImMiOiJjcmVhdGl2ZSIsImQiOjB9LHsidCI6IkxpY2Vuc2UgcGxhdGUgZ2FtZSwgbG9zZXIgYnV5cyBpY2UgY3JlYW0iLCJlIjoi8J-amSIsImMiOiJzb2NpYWwiLCJkIjowfSx7InQiOiJGaW5kIGEgY291bnR5IGZhaXIgYWxvbmcgdGhlIHdheSIsImUiOiLwn46hIiwiYyI6Im5vc3RhbGdpYyIsImQiOjB9LHsidCI6IlRha2UgYSBwaG90byBhdCBldmVyeSBzdGF0ZSBsaW5lIiwiZSI6IvCfk7giLCJjIjoiY3JlYXRpdmUiLCJkIjowfV19">Use this list →</a>
+    </div>
+    <div class="mini-grid">
+      <div class="mini-card" style="--tint:#DCF3DF"><span class="e">⛺</span><span class="t">Camp somewhere with real stars</span></div>
+      <div class="mini-card" style="--tint:#FFE8D6"><span class="e">🗺️</span><span class="t">Pick a town off the map at random</span></div>
+      <div class="mini-card" style="--tint:#FFE0E7"><span class="e">🍓</span><span class="t">Stop for fruit at every farm stand</span></div>
+      <div class="mini-card" style="--tint:#DCF3DF"><span class="e">🏞️</span><span class="t">Hike to a waterfall together</span></div>
+      <div class="mini-card" style="--tint:#EBE4FF"><span class="e">🎶</span><span class="t">Build the ultimate road trip playlist</span></div>
+      <div class="mini-card" style="--tint:#FFE2F4"><span class="e">🚙</span><span class="t">License plate game, loser buys ice cream</span></div>
+      <div class="mini-card" style="--tint:#FFF0C8"><span class="e">🎡</span><span class="t">Find a county fair along the way</span></div>
+      <div class="mini-card" style="--tint:#EBE4FF"><span class="e">📸</span><span class="t">Take a photo at every state line</span></div>
+    </div>
+  </section>
+
+  <!-- 5: Cottagecore Summer — 6 items -->
+  <section class="persona">
+    <div class="persona-head">
+      <div class="persona-id">
+        <span class="persona-emoji">🌻</span>
+        <div><p class="persona-title">Cottagecore Summer</p><p class="persona-sub">slow mornings, baking, pressed flowers</p></div>
+      </div>
+      <a class="use-btn" href="/?list=eyJ0IjoiQ290dGFnZWNvcmUgU3VtbWVyIEJ1Y2tldCBMaXN0IiwiaSI6W3sidCI6IlN0YXJ0IGEgdGlueSBoZXJiIGdhcmRlbiIsImUiOiLwn4yxIiwiYyI6ImNyZWF0aXZlIiwiZCI6MH0seyJ0IjoiQmFrZSBzb21ldGhpbmcgd2l0aCBzdW1tZXIgZnJ1aXQiLCJlIjoi8J-lpyIsImMiOiJmb29kIiwiZCI6MH0seyJ0IjoiUHJlc3MgZmxvd2VycyBhbmQgZnJhbWUgdGhlbSIsImUiOiLwn4y4IiwiYyI6ImNyZWF0aXZlIiwiZCI6MH0seyJ0IjoiUmVhZCBhIHdob2xlIGJvb2sgaW4gb25lIGxhenkgZGF5IiwiZSI6IvCfk5YiLCJjIjoiY2hpbGwiLCJkIjowfSx7InQiOiJTbG93IG1vcm5pbmdzLCBubyBhbGFybSIsImUiOiLimJUiLCJjIjoiY2hpbGwiLCJkIjowfSx7InQiOiJXcml0ZSBhIHJlYWwgbGV0dGVyIHRvIHNvbWVvbmUiLCJlIjoi4pyJ77iPIiwiYyI6InNvY2lhbCIsImQiOjB9XX0=">Use this list →</a>
+    </div>
+    <div class="mini-grid">
+      <div class="mini-card" style="--tint:#EBE4FF"><span class="e">🌱</span><span class="t">Start a tiny herb garden</span></div>
+      <div class="mini-card" style="--tint:#FFE0E7"><span class="e">🥧</span><span class="t">Bake something with summer fruit</span></div>
+      <div class="mini-card" style="--tint:#EBE4FF"><span class="e">🌸</span><span class="t">Press flowers and frame them</span></div>
+      <div class="mini-card" style="--tint:#DBF6E5"><span class="e">📖</span><span class="t">Read a whole book in one lazy day</span></div>
+      <div class="mini-card" style="--tint:#DBF6E5"><span class="e">☕</span><span class="t">Slow mornings, no alarm</span></div>
+      <div class="mini-card" style="--tint:#FFE2F4"><span class="e">✉️</span><span class="t">Write a real letter to someone</span></div>
+    </div>
+  </section>
+
+  <!-- 6: Last Summer Before College — 5 items -->
+  <section class="persona">
+    <div class="persona-head">
+      <div class="persona-id">
+        <span class="persona-emoji">🎓</span>
+        <div><p class="persona-title">Last Summer Before College</p><p class="persona-sub">one last good chapter with everyone</p></div>
+      </div>
+      <a class="use-btn" href="/?list=eyJ0IjoiTGFzdCBTdW1tZXIgQmVmb3JlIENvbGxlZ2UgQnVja2V0IExpc3QiLCJpIjpbeyJ0IjoiT25lIGJpZyBsYXN0IGh1cnJhaCB3aXRoIGV2ZXJ5b25lIiwiZSI6IvCfpbMiLCJjIjoic29jaWFsIiwiZCI6MH0seyJ0IjoiU3RheSB1cCBhbGwgbmlnaHQsIHdhdGNoIHRoZSBzdW5yaXNlIiwiZSI6IvCfjIMiLCJjIjoiYWR2ZW50dXJlIiwiZCI6MH0seyJ0IjoiVGFrZSB3YXkgdG9vIG1hbnkgcGhvdG9zIiwiZSI6IvCfk7giLCJjIjoiY3JlYXRpdmUiLCJkIjowfSx7InQiOiJLYXJhb2tlLCBldmVuIGlmIHlvdSBhcmUgYmFkIiwiZSI6IvCfjqQiLCJjIjoic29jaWFsIiwiZCI6MH0seyJ0IjoiV3JpdGUgbGV0dGVycyB0byBvcGVuIGZyZXNobWFuIHllYXIiLCJlIjoi8J-SjCIsImMiOiJub3N0YWxnaWMiLCJkIjowfV19">Use this list →</a>
+    </div>
+    <div class="mini-grid">
+      <div class="mini-card" style="--tint:#FFE2F4"><span class="e">🥳</span><span class="t">One big last hurrah with everyone</span></div>
+      <div class="mini-card" style="--tint:#D8F0FF"><span class="e">🌃</span><span class="t">Stay up all night, watch the sunrise</span></div>
+      <div class="mini-card" style="--tint:#EBE4FF"><span class="e">📸</span><span class="t">Take way too many photos</span></div>
+      <div class="mini-card" style="--tint:#FFE2F4"><span class="e">🎤</span><span class="t">Karaoke, even if you're bad</span></div>
+      <div class="mini-card" style="--tint:#FFF0C8"><span class="e">💌</span><span class="t">Write letters to open freshman year</span></div>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <h2>What's your summer look like?</h2>
+    <a href="/">Make your own list →</a>
+  </div>
+</div>
+
+<footer>Have a Great Summer · Made for sunny days</footer>
+</body>
+</html>
