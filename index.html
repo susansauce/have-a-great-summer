@@ -1267,14 +1267,48 @@ function closeAuthModal(){
 function switchToLogin(){
   document.getElementById('authLoginPanel').style.display='';
   document.getElementById('authSignupPanel').style.display='none';
+  document.getElementById('authForgotPanel').style.display='none';
   document.getElementById('authSuccessPanel').style.display='none';
   document.getElementById('loginErr').textContent='';
 }
 function switchToSignup(){
   document.getElementById('authLoginPanel').style.display='none';
   document.getElementById('authSignupPanel').style.display='';
+  document.getElementById('authForgotPanel').style.display='none';
   document.getElementById('authSuccessPanel').style.display='none';
   document.getElementById('signupErr').textContent='';
+}
+
+function switchToForgot(){
+  document.getElementById('authLoginPanel').style.display='none';
+  document.getElementById('authSignupPanel').style.display='none';
+  document.getElementById('authForgotPanel').style.display='';
+  document.getElementById('authSuccessPanel').style.display='none';
+  document.getElementById('forgotErr').textContent='';
+}
+
+async function handleForgotPassword(){
+  const email=document.getElementById('forgotEmail').value.trim();
+  const errEl=document.getElementById('forgotErr');
+  const btn=document.getElementById('forgotBtn');
+  errEl.textContent='';
+  if(!email){ errEl.textContent='Please enter your email address.'; return; }
+  btn.disabled=true; btn.textContent='Sending…';
+  try{
+    const res=await fetch('/api/auth/forgot-password',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email})
+    });
+    const data=await res.json();
+    if(!data.success) throw new Error(data.error);
+    document.getElementById('authSuccessMsg').textContent='Check your email for a reset link!';
+    document.getElementById('authForgotPanel').style.display='none';
+    document.getElementById('authSuccessPanel').style.display='';
+  }catch(err){
+    errEl.textContent=err.message;
+    btn.disabled=false; btn.textContent='Send reset link';
+  }
 }
 
 async function handleLogin(){
@@ -1400,6 +1434,15 @@ updateAuthNav();
     <div class="auth-err" id="loginErr"></div>
     <button class="auth-submit" id="loginBtn" onclick="handleLogin()">Sign in</button>
     <p class="auth-switch">No account? <a href="#" onclick="switchToSignup()">Create one</a></p>
+    <p class="auth-switch"><a href="#" onclick="switchToForgot()">Forgot password?</a></p>
+  </div>
+  <div class="auth-panel" id="authForgotPanel" style="display:none">
+    <h2 class="auth-title">Reset password</h2>
+    <p class="auth-sub">We'll send a reset link to your email.</p>
+    <div class="auth-field"><label>Email</label><input type="email" id="forgotEmail" placeholder="you@email.com" autocomplete="email" /></div>
+    <div class="auth-err" id="forgotErr"></div>
+    <button class="auth-submit" id="forgotBtn" onclick="handleForgotPassword()">Send reset link</button>
+    <p class="auth-switch"><a href="#" onclick="switchToLogin()">Back to sign in</a></p>
   </div>
   <div class="auth-panel" id="authSignupPanel" style="display:none">
     <h2 class="auth-title">Create account</h2>
