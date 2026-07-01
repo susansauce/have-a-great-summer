@@ -150,6 +150,18 @@
   .bar{height:12px;border-radius:99px;background:#fff;overflow:hidden;border:2px solid #fff;box-shadow:inset 0 0 0 1px #efe6f5;}
   .bar > span{display:block;height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,var(--lime),var(--sky));transition:width .5s cubic-bezier(.2,.8,.2,1);}
   .progress-label{font-weight:700;font-size:13px;color:var(--ink-soft);margin-top:7px;}
+  /* ---------- welcome-back banner ---------- */
+  .welcome-back{
+    display:none;align-items:center;gap:12px;flex-wrap:wrap;
+    background:rgba(255,255,255,.80);border:2px solid #e8e0f5;border-radius:16px;
+    padding:14px 18px;margin-bottom:18px;box-shadow:0 8px 24px -16px rgba(70,40,90,.3);
+  }
+  .welcome-back.show{display:flex;}
+  .wb-icon{font-size:22px;flex-shrink:0;}
+  .wb-text{font-family:var(--display);font-weight:600;font-size:15px;color:var(--ink);flex:1;}
+  .wb-dismiss{border:none;background:transparent;color:var(--ink-soft);cursor:pointer;font-size:16px;font-weight:700;padding:4px 6px;line-height:1;flex-shrink:0;}
+  .wb-dismiss:hover{color:var(--ink);}
+
   .savelink-btn{
     margin-top:14px;font-family:var(--display);font-weight:700;font-size:13px;color:var(--grape);cursor:pointer;
     background:#fff;border:2px solid #ebe3f3;padding:8px 16px;border-radius:11px;
@@ -230,6 +242,53 @@
   footer a{text-decoration:underline;text-decoration-color:transparent;transition:text-decoration-color .15s;}
   footer a:hover{text-decoration-color:currentColor;}
 
+  /* ---------- auth nav ---------- */
+  .auth-nav{ display:flex;align-items:center; }
+  .auth-nav-btn{
+    font-family:var(--display);font-weight:700;font-size:14px;color:#fff;cursor:pointer;border:none;
+    background:linear-gradient(95deg,var(--coral),var(--grape));padding:9px 18px;border-radius:12px;
+    transition:transform .12s ease;
+  }
+  .auth-nav-btn:hover{ transform:translateY(-1px); }
+  .auth-nav-user{ font-family:var(--display);font-weight:600;font-size:13px;color:var(--ink-soft);display:flex;align-items:center;gap:10px; }
+  .auth-nav-signout{
+    font-family:var(--display);font-weight:700;font-size:13px;color:var(--grape);cursor:pointer;
+    background:transparent;border:2px solid var(--grape);padding:6px 14px;border-radius:10px;
+  }
+  /* ---------- auth modal ---------- */
+  .auth-overlay{ display:none;position:fixed;inset:0;background:rgba(44,35,80,.45);z-index:100;backdrop-filter:blur(4px); }
+  .auth-overlay.show{ display:block; }
+  .auth-modal{
+    display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    background:#fff;border-radius:26px;padding:clamp(28px,4vw,44px);width:min(92vw,440px);
+    box-shadow:0 32px 64px -24px rgba(44,35,80,.5);z-index:101;
+  }
+  .auth-modal.show{ display:block;animation:pop .25s ease both; }
+  .auth-close{ position:absolute;top:16px;right:16px;border:none;background:transparent;font-size:18px;color:var(--ink-soft);cursor:pointer;font-weight:700; }
+  .auth-title{ font-family:var(--display);font-weight:700;font-size:28px;margin:0 0 8px;color:var(--ink); }
+  .auth-sub{ font-size:15px;color:var(--ink-soft);font-weight:600;margin:0 0 24px; }
+  .auth-field{ margin-bottom:16px; }
+  .auth-field label{ display:block;font-family:var(--display);font-weight:600;font-size:13px;margin-bottom:6px;color:var(--ink); }
+  .auth-field input{
+    width:100%;font-family:var(--body);font-weight:600;font-size:16px;color:var(--ink);
+    padding:12px 14px;border-radius:13px;border:2px solid #efe6f5;background:#fff;
+  }
+  .auth-field input:focus{ outline:none;border-color:var(--grape);box-shadow:0 0 0 4px rgba(139,108,240,.18); }
+  .auth-err{ color:var(--coral);font-size:13px;min-height:18px;margin-bottom:8px;font-weight:600; }
+  .auth-submit{
+    width:100%;font-family:var(--display);font-weight:700;font-size:17px;color:#fff;cursor:pointer;border:none;
+    padding:14px;border-radius:14px;background:linear-gradient(95deg,var(--coral),var(--grape));
+    box-shadow:0 12px 26px -10px rgba(255,90,122,.5);margin-bottom:16px;
+  }
+  .auth-submit:disabled{ opacity:.6;cursor:default; }
+  .auth-switch{ text-align:center;font-size:14px;color:var(--ink-soft);font-weight:600;margin:0; }
+  .auth-switch a{ color:var(--grape);font-weight:700;text-decoration:none; }
+  .auth-success-icon{
+    width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--lime),var(--sky));
+    display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;
+    margin:0 auto 20px;font-weight:700;
+  }
+
   /* ---------- invite a friend ---------- */
   .invite{padding:10px 0;}
   .invitebar{
@@ -305,62 +364,6 @@
     .card{break-inside:avoid;box-shadow:none;border:2px solid #eee;}
   }
   @media(prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;}}
-/* ---------- auth nav button ---------- */
-  .auth-nav{ display:flex;align-items:center; }
-  .auth-nav-btn{
-    font-family:var(--display);font-weight:700;font-size:14px;color:#fff;cursor:pointer;border:none;
-    background:linear-gradient(95deg,var(--coral),var(--grape));padding:9px 18px;border-radius:12px;
-    transition:transform .12s ease;
-  }
-  .auth-nav-btn:hover{ transform:translateY(-1px); }
-  .auth-nav-user{
-    font-family:var(--display);font-weight:600;font-size:13px;color:var(--ink-soft);
-    display:flex;align-items:center;gap:10px;
-  }
-  .auth-nav-signout{
-    font-family:var(--display);font-weight:700;font-size:13px;color:var(--grape);cursor:pointer;
-    background:transparent;border:2px solid var(--grape);padding:6px 14px;border-radius:10px;
-  }
-
-  /* ---------- auth modal ---------- */
-  .auth-overlay{
-    display:none;position:fixed;inset:0;background:rgba(44,35,80,.45);z-index:100;
-    backdrop-filter:blur(4px);
-  }
-  .auth-overlay.show{ display:block; }
-  .auth-modal{
-    display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-    background:#fff;border-radius:26px;padding:clamp(28px,4vw,44px);width:min(92vw,440px);
-    box-shadow:0 32px 64px -24px rgba(44,35,80,.5);z-index:101;
-  }
-  .auth-modal.show{ display:block;animation:pop .25s ease both; }
-  .auth-close{
-    position:absolute;top:16px;right:16px;border:none;background:transparent;
-    font-size:18px;color:var(--ink-soft);cursor:pointer;font-weight:700;
-  }
-  .auth-title{ font-family:var(--display);font-weight:700;font-size:28px;margin:0 0 8px;color:var(--ink); }
-  .auth-sub{ font-size:15px;color:var(--ink-soft);font-weight:600;margin:0 0 24px; }
-  .auth-field{ margin-bottom:16px; }
-  .auth-field label{ display:block;font-family:var(--display);font-weight:600;font-size:13px;margin-bottom:6px;color:var(--ink); }
-  .auth-field input{
-    width:100%;font-family:var(--body);font-weight:600;font-size:16px;color:var(--ink);
-    padding:12px 14px;border-radius:13px;border:2px solid #efe6f5;background:#fff;
-  }
-  .auth-field input:focus{ outline:none;border-color:var(--grape);box-shadow:0 0 0 4px rgba(139,108,240,.18); }
-  .auth-err{ color:var(--coral);font-size:13px;min-height:18px;margin-bottom:8px;font-weight:600; }
-  .auth-submit{
-    width:100%;font-family:var(--display);font-weight:700;font-size:17px;color:#fff;cursor:pointer;border:none;
-    padding:14px;border-radius:14px;background:linear-gradient(95deg,var(--coral),var(--grape));
-    box-shadow:0 12px 26px -10px rgba(255,90,122,.5);margin-bottom:16px;
-  }
-  .auth-submit:disabled{ opacity:.6;cursor:default; }
-  .auth-switch{ text-align:center;font-size:14px;color:var(--ink-soft);font-weight:600;margin:0; }
-  .auth-switch a{ color:var(--grape);font-weight:700;text-decoration:none; }
-  .auth-success-icon{
-    width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--lime),var(--sky));
-    display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;
-    margin:0 auto 20px;font-weight:700;
-  }
 </style>
 
 <!-- ================================================================
@@ -382,7 +385,7 @@
     <a href="/contact.html">Contact</a>
   </nav>
   <div class="auth-nav" id="authNav">
-    <button class="auth-nav-btn" id="authNavBtn" onclick="openAuthModal()">Sign in</button>
+    <button class="auth-nav-btn" onclick="openAuthModal()">Sign in</button>
   </div>
 </div>
 
@@ -471,6 +474,13 @@
 
 <section class="results" id="results">
   <div class="wrap">
+
+    <div class="welcome-back" id="welcomeBack">
+      <span class="wb-icon">👋</span>
+      <span class="wb-text">Welcome back — your list is right where you left it.</span>
+      <button class="wb-dismiss" onclick="this.parentElement.style.display='none'">✕</button>
+    </div>
+
     <div class="result-head">
       <div class="progress-wrap">
         <div class="bar"><span id="barFill"></span></div>
@@ -480,7 +490,7 @@
     </div>
 
     <div id="capture">
-      <div class="list-title" id="listTitle" contenteditable="true" spellcheck="false" oninput="lastImageBlob=null; syncUrl()">My Summer 2026 Bucket List</div>
+      <div class="list-title" id="listTitle" contenteditable="true" spellcheck="false" oninput="lastImageBlob=null; syncUrl(); saveToLocal()">My Summer 2026 Bucket List</div>
       <div class="edit-hint">↑ tap to rename</div>
       <div class="grid" id="grid"></div>
       <div class="brandbar">
@@ -764,6 +774,54 @@ function b64urlDecode(b64url){
   return decodeURIComponent(escape(atob(b64)));
 }
 
+/* ====================================================================
+   LOCALSTORAGE — "remember my list" on this device/browser.
+   Saves automatically on every change. Restores silently on next visit
+   with a friendly banner so people know what happened. A URL ?list= link
+   always takes priority over the local saved list.
+==================================================================== */
+const LS_KEY = 'hags_saved_list';
+
+function saveToLocal(){
+  if(!current.length){
+    localStorage.removeItem(LS_KEY);
+    return;
+  }
+  const obj = {
+    t: document.getElementById('listTitle').textContent,
+    i: current.map(c=>({ t:c.t, e:c.e, c:c.cat, d:c.done?1:0 })),
+    ts: Date.now()
+  };
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(obj)); }
+  catch(e){ /* storage full or blocked — fail silently */ }
+}
+
+function tryRestoreFromLocal(){
+  // Only restore from local if there's no ?list= URL param — URL takes priority
+  if(new URLSearchParams(location.search).get('list')) return false;
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return false;
+    const obj = JSON.parse(raw);
+    if(!obj || !Array.isArray(obj.i) || !obj.i.length) return false;
+    // Don't restore if saved more than 120 days ago — summer is long over
+    if(obj.ts && (Date.now() - obj.ts) > 120 * 86400000){
+      localStorage.removeItem(LS_KEY);
+      return false;
+    }
+    current = obj.i.map(it=>({ t:it.t, e:it.e, cat:it.c, done:!!it.d, id:++idCounter, source:'own' }));
+    assignSizes();
+    document.getElementById('listTitle').textContent = obj.t || 'My Summer 2026 Bucket List';
+    renderGrid();
+    document.getElementById('results').classList.add('show');
+    document.getElementById('welcomeBack').classList.add('show');
+    if(window.goatcounter && window.goatcounter.count){
+      window.goatcounter.count({path:'list-restored-local', title:'List restored from localStorage', event:true});
+    }
+    return true;
+  }catch(e){ return false; }
+}
+
 function syncUrl(){
   if(!current.length){
     history.replaceState(null, '', location.pathname);
@@ -833,6 +891,8 @@ function renderGrid(){
 
   updateProgress();
   syncUrl();
+  saveToLocal();
+  saveToDatabase();
 }
 
 function toggleDone(id, el){
@@ -846,6 +906,8 @@ function toggleDone(id, el){
   }
   updateProgress();
   syncUrl();
+  saveToLocal();
+  saveToDatabase();
 }
 
 function swapItem(id){
@@ -1025,6 +1087,7 @@ document.getElementById('stayForm').addEventListener('submit', async function(e)
 document.getElementById('regenBtn').addEventListener('click', ()=>{
   current = [];
   syncUrl(); // clears the ?list= param since current is now empty
+  localStorage.removeItem(LS_KEY); // forget the saved list too
   document.getElementById('vibe').value = '';
   document.getElementById('ownText').value = '';
   document.getElementById('results').classList.remove('show');
@@ -1133,9 +1196,16 @@ document.getElementById('saveLinkBtn').addEventListener('click', async ()=>{
   }
 });
 
-/* If this page was opened from a save-link, restore that list instead of
-   showing the empty form. Runs once, at the end of setup. */
-tryRestoreFromUrl();
+/* Startup restore priority:
+   1. URL ?list= param (shared link)
+   2. Database (logged in user)
+   3. localStorage (same device fallback) */
+(async()=>{
+  if(!tryRestoreFromUrl()){
+    const loadedFromDb=await loadFromDatabase();
+    if(!loadedFromDb) tryRestoreFromLocal();
+  }
+})();
 
 /* ====================================================================
    COUNTDOWN — pure date math, no backend.
@@ -1167,32 +1237,19 @@ fetch(`https://${GOATCOUNTER_CODE}.goatcounter.com/counter/${encodeURIComponent(
   })
   .catch(()=>{ /* quietly hide if the counter isn't enabled yet */ });
 
-
 /* ====================================================================
    AUTH SYSTEM
 ==================================================================== */
 const AUTH_KEY = 'hags_auth';
-
-function getSession(){
-  try{ return JSON.parse(localStorage.getItem(AUTH_KEY)); }
-  catch(e){ return null; }
-}
-function saveSession(session){
-  localStorage.setItem(AUTH_KEY, JSON.stringify(session));
-}
-function clearSession(){
-  localStorage.removeItem(AUTH_KEY);
-}
+function getSession(){ try{ return JSON.parse(localStorage.getItem(AUTH_KEY)); }catch(e){ return null; } }
+function saveSession(s){ localStorage.setItem(AUTH_KEY, JSON.stringify(s)); }
+function clearSession(){ localStorage.removeItem(AUTH_KEY); }
 
 function updateAuthNav(){
   const session = getSession();
   const nav = document.getElementById('authNav');
   if(session && session.user){
-    nav.innerHTML = `
-      <div class="auth-nav-user">
-        <span>${session.user.email}</span>
-        <button class="auth-nav-signout" onclick="handleSignout()">Sign out</button>
-      </div>`;
+    nav.innerHTML = `<div class="auth-nav-user"><span>${session.user.email}</span><button class="auth-nav-signout" onclick="handleSignout()">Sign out</button></div>`;
   } else {
     nav.innerHTML = `<button class="auth-nav-btn" onclick="openAuthModal()">Sign in</button>`;
   }
@@ -1208,130 +1265,151 @@ function closeAuthModal(){
   document.getElementById('authModal').classList.remove('show');
 }
 function switchToLogin(){
-  document.getElementById('authLoginPanel').style.display = '';
-  document.getElementById('authSignupPanel').style.display = 'none';
-  document.getElementById('authSuccessPanel').style.display = 'none';
-  document.getElementById('loginErr').textContent = '';
+  document.getElementById('authLoginPanel').style.display='';
+  document.getElementById('authSignupPanel').style.display='none';
+  document.getElementById('authSuccessPanel').style.display='none';
+  document.getElementById('loginErr').textContent='';
 }
 function switchToSignup(){
-  document.getElementById('authLoginPanel').style.display = 'none';
-  document.getElementById('authSignupPanel').style.display = '';
-  document.getElementById('authSuccessPanel').style.display = 'none';
-  document.getElementById('signupErr').textContent = '';
+  document.getElementById('authLoginPanel').style.display='none';
+  document.getElementById('authSignupPanel').style.display='';
+  document.getElementById('authSuccessPanel').style.display='none';
+  document.getElementById('signupErr').textContent='';
 }
 
 async function handleLogin(){
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  const errEl = document.getElementById('loginErr');
-  const btn = document.getElementById('loginBtn');
-  errEl.textContent = '';
-  if(!email || !password){ errEl.textContent = 'Please enter your email and password.'; return; }
-  btn.disabled = true; btn.textContent = 'Signing in…';
+  const email=document.getElementById('loginEmail').value.trim();
+  const password=document.getElementById('loginPassword').value;
+  const errEl=document.getElementById('loginErr');
+  const btn=document.getElementById('loginBtn');
+  errEl.textContent='';
+  if(!email||!password){ errEl.textContent='Please enter your email and password.'; return; }
+  btn.disabled=true; btn.textContent='Signing in…';
   try{
-    const res = await fetch('/api/auth/login', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ email, password })
-    });
-    const data = await res.json();
+    const res=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+    const data=await res.json();
     if(!data.success) throw new Error(data.error);
-    saveSession({ user: data.user, access_token: data.access_token });
+    saveSession({user:data.user,access_token:data.access_token});
     updateAuthNav();
-    document.getElementById('authSuccessMsg').textContent = `Welcome back, ${data.user.email}!`;
-    document.getElementById('authLoginPanel').style.display = 'none';
-    document.getElementById('authSuccessPanel').style.display = '';
-    setTimeout(closeAuthModal, 1800);
+    document.getElementById('authSuccessMsg').textContent=`Welcome back, ${data.user.email}!`;
+    document.getElementById('authLoginPanel').style.display='none';
+    document.getElementById('authSuccessPanel').style.display='';
+    setTimeout(async()=>{ closeAuthModal(); currentListId=null; await loadFromDatabase(); }, 1800);
   }catch(err){
-    errEl.textContent = err.message;
-    btn.disabled = false; btn.textContent = 'Sign in';
+    errEl.textContent=err.message;
+    btn.disabled=false; btn.textContent='Sign in';
   }
 }
 
 async function handleSignup(){
-  const email = document.getElementById('signupEmail').value.trim();
-  const password = document.getElementById('signupPassword').value;
-  const errEl = document.getElementById('signupErr');
-  const btn = document.getElementById('signupBtn');
-  errEl.textContent = '';
-  if(!email || !password){ errEl.textContent = 'Please enter your email and password.'; return; }
-  if(password.length < 6){ errEl.textContent = 'Password must be at least 6 characters.'; return; }
-  btn.disabled = true; btn.textContent = 'Creating account…';
+  const email=document.getElementById('signupEmail').value.trim();
+  const password=document.getElementById('signupPassword').value;
+  const errEl=document.getElementById('signupErr');
+  const btn=document.getElementById('signupBtn');
+  errEl.textContent='';
+  if(!email||!password){ errEl.textContent='Please enter your email and password.'; return; }
+  if(password.length<6){ errEl.textContent='Password must be at least 6 characters.'; return; }
+  btn.disabled=true; btn.textContent='Creating account…';
   try{
-    const res = await fetch('/api/auth/signup', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ email, password })
-    });
-    const data = await res.json();
+    const res=await fetch('/api/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+    const data=await res.json();
     if(!data.success) throw new Error(data.error);
-    // Auto-login after signup
-    const loginRes = await fetch('/api/auth/login', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ email, password })
-    });
-    const loginData = await loginRes.json();
-    if(loginData.success){
-      saveSession({ user: loginData.user, access_token: loginData.access_token });
-      updateAuthNav();
-    }
-    document.getElementById('authSuccessMsg').textContent = `Account created! You're signed in as ${email}.`;
-    document.getElementById('authSignupPanel').style.display = 'none';
-    document.getElementById('authSuccessPanel').style.display = '';
-    setTimeout(closeAuthModal, 1800);
+    const loginRes=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+    const loginData=await loginRes.json();
+    if(loginData.success){ saveSession({user:loginData.user,access_token:loginData.access_token}); updateAuthNav(); }
+    document.getElementById('authSuccessMsg').textContent=`Account created! You're signed in as ${email}.`;
+    document.getElementById('authSignupPanel').style.display='none';
+    document.getElementById('authSuccessPanel').style.display='';
+    setTimeout(async()=>{ closeAuthModal(); currentListId=null; await loadFromDatabase(); }, 1800);
   }catch(err){
-    errEl.textContent = err.message;
-    btn.disabled = false; btn.textContent = 'Create account';
+    errEl.textContent=err.message;
+    btn.disabled=false; btn.textContent='Create account';
   }
 }
 
 function handleSignout(){
   clearSession();
+  currentListId=null;
   updateAuthNav();
   showToast('Signed out. See you next time! ☀️');
 }
 
+/* ====================================================================
+   DATABASE LIST SYNC
+==================================================================== */
+let currentListId = null;
+
+async function saveToDatabase(){
+  const session=getSession();
+  if(!session||!session.access_token) return;
+  const title=document.getElementById('listTitle').textContent;
+  const items=current.map(c=>({t:c.t,e:c.e,c:c.cat,d:c.done?1:0}));
+  try{
+    const res=await fetch('/api/lists/save',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`},
+      body:JSON.stringify({title,items,list_id:currentListId})
+    });
+    const data=await res.json();
+    if(data.success) currentListId=data.list.id;
+  }catch(err){ console.error('Failed to save to database:',err); }
+}
+
+async function loadFromDatabase(){
+  const session=getSession();
+  if(!session||!session.access_token) return false;
+  try{
+    const res=await fetch('/api/lists',{headers:{'Authorization':`Bearer ${session.access_token}`}});
+    const data=await res.json();
+    if(!data.success||!data.lists.length) return false;
+    const list=data.lists[0];
+    currentListId=list.id;
+    current=list.items.map(it=>({t:it.t,e:it.e,cat:it.c,done:!!it.d,id:++idCounter,source:'own'}));
+    assignSizes();
+    document.getElementById('listTitle').textContent=list.title;
+    renderGrid();
+    document.getElementById('results').classList.add('show');
+    const wb=document.getElementById('welcomeBack');
+    wb.classList.add('show');
+    wb.querySelector('.wb-text').textContent='Welcome back — your saved list is loaded.';
+    return true;
+  }catch(err){ console.error('Failed to load from database:',err); return false; }
+}
+
 // Initialize auth state on page load
 updateAuthNav();
+
+// Startup restore priority: URL param → database → localStorage
+(async()=>{
+  if(!tryRestoreFromUrl()){
+    const loadedFromDb=await loadFromDatabase();
+    if(!loadedFromDb) tryRestoreFromLocal();
+  }
+})();
 </script>
+
 <!-- AUTH MODAL -->
 <div class="auth-overlay" id="authOverlay" onclick="closeAuthModal()"></div>
 <div class="auth-modal" id="authModal">
   <button class="auth-close" onclick="closeAuthModal()">✕</button>
-
   <div class="auth-panel" id="authLoginPanel">
     <h2 class="auth-title">Welcome back</h2>
     <p class="auth-sub">Sign in to access your saved lists</p>
-    <div class="auth-field">
-      <label>Email</label>
-      <input type="email" id="loginEmail" placeholder="you@email.com" autocomplete="email" />
-    </div>
-    <div class="auth-field">
-      <label>Password</label>
-      <input type="password" id="loginPassword" placeholder="Your password" autocomplete="current-password" />
-    </div>
+    <div class="auth-field"><label>Email</label><input type="email" id="loginEmail" placeholder="you@email.com" autocomplete="email" /></div>
+    <div class="auth-field"><label>Password</label><input type="password" id="loginPassword" placeholder="Your password" autocomplete="current-password" /></div>
     <div class="auth-err" id="loginErr"></div>
     <button class="auth-submit" id="loginBtn" onclick="handleLogin()">Sign in</button>
     <p class="auth-switch">No account? <a href="#" onclick="switchToSignup()">Create one</a></p>
   </div>
-
   <div class="auth-panel" id="authSignupPanel" style="display:none">
     <h2 class="auth-title">Create account</h2>
     <p class="auth-sub">Save and access your lists from anywhere</p>
-    <div class="auth-field">
-      <label>Email</label>
-      <input type="email" id="signupEmail" placeholder="you@email.com" autocomplete="email" />
-    </div>
-    <div class="auth-field">
-      <label>Password</label>
-      <input type="password" id="signupPassword" placeholder="At least 6 characters" autocomplete="new-password" />
-    </div>
+    <div class="auth-field"><label>Email</label><input type="email" id="signupEmail" placeholder="you@email.com" autocomplete="email" /></div>
+    <div class="auth-field"><label>Password</label><input type="password" id="signupPassword" placeholder="At least 6 characters" autocomplete="new-password" /></div>
     <div class="auth-err" id="signupErr"></div>
     <button class="auth-submit" id="signupBtn" onclick="handleSignup()">Create account</button>
     <p class="auth-switch">Already have one? <a href="#" onclick="switchToLogin()">Sign in</a></p>
   </div>
-
   <div class="auth-panel" id="authSuccessPanel" style="display:none">
     <div class="auth-success-icon">✓</div>
     <h2 class="auth-title">You're in!</h2>
