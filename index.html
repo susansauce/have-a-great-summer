@@ -230,6 +230,10 @@
   .act.primary{background:var(--ink);color:#fff;}
   .act.primary:hover{background:var(--grape);border-color:var(--grape);}
   .regen{background:transparent;border:none;color:var(--ink-soft);font-family:var(--display);font-weight:600;font-size:15px;cursor:pointer;text-decoration:underline;padding:12px;}
+  .edit-prefs{text-align:center;padding:10px 0 4px;}
+  .edit-prefs-link{font-family:var(--display);font-weight:600;font-size:14px;color:var(--ink-soft);text-decoration:none;letter-spacing:.03em;}
+  .edit-prefs-link:hover{color:var(--grape);}
+  .panel.collapsed{display:none;}
 
   .brandbar{margin-top:30px;text-align:center;padding-bottom:6px;}
   .bb-line{width:64px;height:5px;border-radius:5px;background:linear-gradient(90deg,var(--coral),var(--sun));margin:0 auto 14px;}
@@ -473,6 +477,9 @@
         <button class="gen" id="ownBtn" data-goatcounter-click="generate-own">✏️ Make my list</button>
       </div>
     </div>
+    <div class="edit-prefs" id="editPrefs" style="display:none">
+      <a href="#" class="edit-prefs-link" onclick="expandPanel(); return false;">✦ Edit preferences</a>
+    </div>
   </div>
 </header>
 
@@ -714,6 +721,24 @@ function scoreItem(item, vibeWords){
   return s;
 }
 
+function showResults(){
+  document.getElementById('results').classList.add('show');
+  document.getElementById('panel').classList.add('collapsed');
+  document.getElementById('editPrefs').style.display = '';
+}
+
+function hideResults(){
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('panel').classList.remove('collapsed');
+  document.getElementById('editPrefs').style.display = 'none';
+}
+
+function expandPanel(){
+  document.getElementById('panel').classList.remove('collapsed');
+  document.getElementById('editPrefs').style.display = 'none';
+  document.getElementById('panel').scrollIntoView({behavior:'smooth'});
+}
+
 function generate(){
   const vibe = document.getElementById('vibe').value.toLowerCase();
   const vibeWords = vibe.split(/[\s,]+/).filter(Boolean);
@@ -742,7 +767,7 @@ function generate(){
   assignSizes();
   renderTitle();
   renderGrid();
-  document.getElementById('results').classList.add('show');
+  showResults();
   document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
@@ -817,7 +842,7 @@ function tryRestoreFromLocal(){
     assignSizes();
     document.getElementById('listTitle').textContent = obj.t || 'My Summer 2026 Bucket List';
     renderGrid();
-    document.getElementById('results').classList.add('show');
+    showResults();
     document.getElementById('welcomeBack').classList.add('show');
     if(window.goatcounter && window.goatcounter.count){
       window.goatcounter.count({path:'list-restored-local', title:'List restored from localStorage', event:true});
@@ -849,7 +874,7 @@ function tryRestoreFromUrl(){
     assignSizes();
     document.getElementById('listTitle').textContent = obj.t || 'My Summer 2026 Bucket List';
     renderGrid();
-    document.getElementById('results').classList.add('show');
+    showResults();
     if(window.goatcounter && window.goatcounter.count){
       window.goatcounter.count({path:'list-restored-from-link', title:'List restored from link', event:true});
     }
@@ -1030,7 +1055,7 @@ function makeOwnList(){
   current=[...current, ...own];
   assignSizes(); renderTitle(); renderGrid();
   document.getElementById('ownText').value='';
-  document.getElementById('results').classList.add('show');
+  showResults();
   document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
 }
 document.getElementById('ownBtn').addEventListener('click', makeOwnList);
@@ -1094,7 +1119,7 @@ document.getElementById('regenBtn').addEventListener('click', ()=>{
   localStorage.removeItem(LS_KEY); // forget the saved list too
   document.getElementById('vibe').value = '';
   document.getElementById('ownText').value = '';
-  document.getElementById('results').classList.remove('show');
+  hideResults();
   document.querySelectorAll('.chips').forEach(group=>{
     const dim = group.dataset.group;
     group.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
@@ -1406,7 +1431,7 @@ async function loadFromDatabase(){
     assignSizes();
     document.getElementById('listTitle').textContent=list.title;
     renderGrid();
-    document.getElementById('results').classList.add('show');
+    showResults();
     const wb=document.getElementById('welcomeBack');
     wb.classList.add('show');
     wb.querySelector('.wb-text').textContent='Welcome back — your saved list is loaded.';
@@ -1416,6 +1441,12 @@ async function loadFromDatabase(){
 
 // Initialize auth state on page load
 updateAuthNav();
+
+// Auto-open sign in modal if redirected from another page with ?signin=1
+if(new URLSearchParams(location.search).get('signin') === '1'){
+  history.replaceState(null, '', location.pathname);
+  openAuthModal();
+}
 
 // Startup restore priority: URL param → database → localStorage
 (async()=>{
