@@ -151,12 +151,12 @@
   .bar > span{display:block;height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,var(--lime),var(--sky));transition:width .5s cubic-bezier(.2,.8,.2,1);}
   .progress-label{font-weight:700;font-size:13px;color:var(--ink-soft);margin-top:7px;}
   /* ---------- welcome-back banner ---------- */
-  .welcome-back{
+  .welcome-back, .signup-nudge{
     display:none;align-items:center;gap:12px;flex-wrap:wrap;
     background:rgba(255,255,255,.80);border:2px solid #e8e0f5;border-radius:16px;
     padding:14px 18px;margin-bottom:18px;box-shadow:0 8px 24px -16px rgba(70,40,90,.3);
   }
-  .welcome-back.show{display:flex;}
+  .welcome-back.show, .signup-nudge.show{display:flex;}
   .wb-icon{font-size:22px;flex-shrink:0;}
   .wb-text{font-family:var(--display);font-weight:600;font-size:15px;color:var(--ink);flex:1;}
   .wb-dismiss{border:none;background:transparent;color:var(--ink-soft);cursor:pointer;font-size:16px;font-weight:700;padding:4px 6px;line-height:1;flex-shrink:0;}
@@ -389,6 +389,7 @@
   <nav class="nav-links">
     <a href="/" class="current">Home</a>
     <a href="/gallery.html">Inspiration</a>
+    <a href="/my-lists.html">My Lists</a>
     <a href="/about.html">About</a>
     <a href="/contact.html">Contact</a>
   </nav>
@@ -492,12 +493,18 @@
       <button class="wb-dismiss" onclick="this.parentElement.style.display='none'">✕</button>
     </div>
 
+    <div class="signup-nudge" id="signupNudge" style="display:none">
+      <span class="wb-icon">☀️</span>
+      <span class="wb-text">Love your list? <a href="/?signin=1" style="color:var(--grape);font-weight:800;">Create a free account</a> to save it and access it from any device.</span>
+      <button class="wb-dismiss" onclick="this.parentElement.style.display='none'">✕</button>
+    </div>
+
     <div class="result-head">
       <div class="progress-wrap">
         <div class="bar"><span id="barFill"></span></div>
         <div class="progress-label" id="progLabel">0 of 0 done</div>
       </div>
-      <button class="savelink-btn" id="saveLinkBtn" data-goatcounter-click="copy-save-link">🔗 Save my list (copy link)</button>
+      <button class="savelink-btn" id="saveLinkBtn" style="display:none" data-goatcounter-click="copy-save-link">🔗 Save my list (copy link)</button>
     </div>
 
     <div id="capture">
@@ -559,6 +566,7 @@
   <div class="wrap">
     Made for sunny days. ☀️ Check one off today.<br>
     <a href="/gallery.html" style="color:inherit;">Inspiration</a> ·
+    <a href="/my-lists.html" style="color:inherit;">My Lists</a> ·
     <a href="/about.html" style="color:inherit;">About</a> ·
     <a href="/contact.html" style="color:inherit;">Contact</a> ·
     <a href="/privacy.html" style="color:inherit;">Privacy</a>
@@ -725,6 +733,11 @@ function showResults(){
   document.getElementById('results').classList.add('show');
   document.getElementById('panel').classList.add('collapsed');
   document.getElementById('editPrefs').style.display = '';
+  // Show sign-up nudge only for non-logged-in users
+  const nudge = document.getElementById('signupNudge');
+  if(nudge && !getSession()){
+    nudge.style.display = 'flex';
+  }
 }
 
 function hideResults(){
@@ -740,6 +753,7 @@ function expandPanel(){
 }
 
 function generate(){
+  currentListId = null; // each generation creates a new list record, never overwrites
   const vibe = document.getElementById('vibe').value.toLowerCase();
   const vibeWords = vibe.split(/[\s,]+/).filter(Boolean);
   const dominant = detectDominantTheme(vibeWords);
@@ -1048,6 +1062,7 @@ function guessCat(t){ const s=t.toLowerCase();
 
 /* ---------- write-your-own list ---------- */
 function makeOwnList(){
+  currentListId = null; // each generation creates a new list record
   const raw=document.getElementById('ownText').value;
   const lines=raw.split('\n').map(s=>s.trim()).filter(Boolean);
   if(!lines.length){ showToast('Type a few things first ✏️'); return; }

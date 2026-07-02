@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Lists — Have a Great Summer</title>
+<meta name="description" content="Your saved summer bucket lists." />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2C2350; --ink-soft:#6A6190;
+    --coral:#FF5A7A; --tang:#FF8A3D; --sun:#FFC23C; --lime:#37C97A; --sky:#3CB4FF; --grape:#8B6CF0;
+    --display:'Fredoka',system-ui,sans-serif; --body:'Nunito',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;font-family:var(--body);color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 12% -8%, #FFE6B8 0%, transparent 55%),
+      radial-gradient(1000px 600px at 100% 0%, #FFC7DE 0%, transparent 50%),
+      radial-gradient(900px 700px at 50% 120%, #BDEBC9 0%, transparent 55%),
+      #FFF7EC;
+    min-height:100vh;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:800px;margin:0 auto;padding:0 20px;}
+
+  /* nav */
+  .topbar{display:flex;align-items:center;justify-content:space-between;max-width:800px;margin:0 auto;padding:22px 20px;flex-wrap:wrap;gap:10px;}
+  .brand{font-family:var(--display);font-weight:700;font-size:16px;color:var(--ink);text-decoration:none;}
+  .nav-links{display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
+  .nav-links a{font-family:var(--display);font-weight:600;font-size:14px;color:var(--ink-soft);text-decoration:none;transition:color .15s;}
+  .nav-links a:hover{color:var(--grape);}
+  .nav-links a.current{color:var(--coral);}
+  .auth-nav{display:flex;align-items:center;}
+  .auth-nav-btn{font-family:var(--display);font-weight:700;font-size:14px;color:#fff;cursor:pointer;border:none;background:linear-gradient(95deg,var(--coral),var(--grape));padding:9px 18px;border-radius:12px;transition:transform .12s ease;}
+  .auth-nav-btn:hover{transform:translateY(-1px);}
+  .auth-nav-user{font-family:var(--display);font-weight:600;font-size:13px;color:var(--ink-soft);display:flex;align-items:center;gap:10px;}
+  .auth-nav-signout{font-family:var(--display);font-weight:700;font-size:13px;color:var(--grape);cursor:pointer;background:transparent;border:2px solid var(--grape);padding:6px 14px;border-radius:10px;}
+  @media(max-width:480px){ .topbar{justify-content:center;text-align:center;} .nav-links{justify-content:center;width:100%;} }
+
+  /* page */
+  main{padding:20px 0 80px;}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,6vw,48px);letter-spacing:-.01em;margin:0 0 6px;}
+  h1 .pop{color:var(--coral);}
+  .subtitle{font-size:17px;color:var(--ink-soft);font-weight:600;margin:0 0 36px;}
+
+  /* sign-in prompt */
+  .signin-prompt{
+    text-align:center;background:rgba(255,255,255,.7);border:2px solid #fff;border-radius:22px;
+    padding:clamp(32px,5vw,56px);box-shadow:0 24px 50px -32px rgba(70,40,90,.35);
+  }
+  .signin-prompt h2{font-family:var(--display);font-weight:700;font-size:28px;margin:0 0 12px;}
+  .signin-prompt p{font-size:16px;color:var(--ink-soft);font-weight:600;margin:0 0 24px;}
+  .btn-primary{display:inline-block;font-family:var(--display);font-weight:700;font-size:16px;color:#fff;cursor:pointer;border:none;background:linear-gradient(95deg,var(--coral),var(--grape));padding:14px 28px;border-radius:14px;box-shadow:0 12px 26px -10px rgba(255,90,122,.5);text-decoration:none;}
+  .btn-secondary{display:inline-block;margin-top:12px;font-family:var(--display);font-weight:700;font-size:14px;color:var(--grape);text-decoration:none;}
+
+  /* empty state */
+  .empty-state{text-align:center;padding:60px 20px;}
+  .empty-state h2{font-family:var(--display);font-weight:700;font-size:24px;margin:0 0 12px;}
+  .empty-state p{font-size:16px;color:var(--ink-soft);font-weight:600;margin:0 0 24px;}
+
+  /* loading */
+  .loading{text-align:center;padding:60px 20px;font-family:var(--display);font-weight:600;font-size:18px;color:var(--ink-soft);}
+
+  /* list cards */
+  .lists-grid{display:flex;flex-direction:column;gap:18px;}
+  .list-card{
+    background:rgba(255,255,255,.75);border:2px solid #fff;border-radius:20px;
+    padding:22px 24px;box-shadow:0 16px 40px -24px rgba(70,40,90,.3);
+  }
+  .list-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .list-title-wrap{flex:1;min-width:0;}
+  .list-title{
+    font-family:var(--display);font-weight:700;font-size:20px;color:var(--ink);
+    margin:0 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .list-title-edit{
+    font-family:var(--display);font-weight:700;font-size:20px;color:var(--ink);
+    border:2px solid var(--grape);border-radius:10px;padding:4px 10px;width:100%;
+    background:#fff;display:none;
+  }
+  .list-title-edit:focus{outline:none;box-shadow:0 0 0 4px rgba(139,108,240,.18);}
+  .list-meta{font-size:13px;color:var(--ink-soft);font-weight:700;}
+  .list-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .btn-icon{
+    font-family:var(--display);font-weight:700;font-size:13px;color:var(--ink-soft);cursor:pointer;
+    background:transparent;border:2px solid #e8e0f5;padding:7px 14px;border-radius:10px;
+    transition:all .15s ease;white-space:nowrap;
+  }
+  .btn-icon:hover{border-color:var(--grape);color:var(--grape);}
+  .btn-icon.danger:hover{border-color:var(--coral);color:var(--coral);}
+  .btn-icon.editing{display:none;}
+  .btn-save{display:none;font-family:var(--display);font-weight:700;font-size:13px;color:#fff;cursor:pointer;background:var(--grape);border:none;padding:7px 14px;border-radius:10px;}
+  .btn-cancel{display:none;font-family:var(--display);font-weight:700;font-size:13px;color:var(--ink-soft);cursor:pointer;background:transparent;border:2px solid #e8e0f5;padding:7px 14px;border-radius:10px;}
+
+  /* items preview */
+  .list-preview{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;}
+  .preview-chip{
+    font-size:12px;font-weight:700;font-family:var(--display);
+    background:#f5f0ff;color:var(--grape);border-radius:8px;padding:4px 10px;
+  }
+  .preview-more{font-size:12px;font-weight:700;font-family:var(--display);color:var(--ink-soft);padding:4px 6px;}
+
+  /* divider */
+  .list-card-footer{margin-top:14px;padding-top:14px;border-top:2px solid #f0eaf8;display:flex;gap:10px;flex-wrap:wrap;}
+
+  /* toast */
+  .toast{
+    position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);
+    background:var(--ink);color:#fff;font-family:var(--display);font-weight:600;font-size:15px;
+    padding:14px 24px;border-radius:14px;z-index:200;opacity:0;transition:all .3s ease;pointer-events:none;
+    white-space:nowrap;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  footer{text-align:center;padding:30px 0 50px;color:var(--ink-soft);font-weight:600;font-size:13px;line-height:2.2;}
+  footer a{color:inherit;text-decoration:none;}
+
+  @media print{
+    .topbar,.list-actions,.list-card-footer,.toast,footer{ display:none!important; }
+    body{ background:#fff; }
+    .list-card{ box-shadow:none;border:1px solid #ccc;break-inside:avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="/">☀️ Have a Great Summer</a>
+  <nav class="nav-links">
+    <a href="/">Home</a>
+    <a href="/gallery.html">Inspiration</a>
+    <a href="/my-lists.html" class="current">My Lists</a>
+    <a href="/about.html">About</a>
+    <a href="/contact.html">Contact</a>
+  </nav>
+  <div class="auth-nav" id="authNav"></div>
+</div>
+
+<main class="wrap">
+  <h1>My <span class="pop">Lists</span></h1>
+  <p class="subtitle">All your saved summer bucket lists in one place.</p>
+
+  <div id="pageContent">
+    <div class="loading">Loading your lists… ☀️</div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  Have a Great Summer · Made for sunny days<br>
+  <a href="/">Home</a> ·
+  <a href="/gallery.html">Inspiration</a> ·
+  <a href="/about.html">About</a> ·
+  <a href="/contact.html">Contact</a> ·
+  <a href="/privacy.html">Privacy</a>
+</footer>
+
+<script>
+const AUTH_KEY = 'hags_auth';
+function getSession(){ try{ return JSON.parse(localStorage.getItem(AUTH_KEY)); }catch(e){ return null; } }
+function clearSession(){ localStorage.removeItem(AUTH_KEY); }
+
+function updateAuthNav(){
+  const session = getSession();
+  const nav = document.getElementById('authNav');
+  if(session && session.user){
+    nav.innerHTML = `<div class="auth-nav-user"><span>${session.user.email}</span><button class="auth-nav-signout" onclick="handleSignout()">Sign out</button></div>`;
+  } else {
+    nav.innerHTML = `<button class="auth-nav-btn" onclick="window.location.href='/?signin=1'">Sign in</button>`;
+  }
+}
+function handleSignout(){ clearSession(); updateAuthNav(); renderPage(); }
+updateAuthNav();
+
+/* ── toast ── */
+let toastTimer;
+function showToast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>el.classList.remove('show'), 2800);
+}
+
+/* ── URL encoding (same as homepage) ── */
+function b64urlEncode(str){
+  const b64 = btoa(unescape(encodeURIComponent(str)));
+  return b64.replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function listToShareUrl(list){
+  const obj = { t: list.title, i: list.items };
+  return `${location.origin}/?list=${b64urlEncode(JSON.stringify(obj))}`;
+}
+
+/* ── date formatting ── */
+function fmtDate(iso){
+  return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+
+/* ── API helpers ── */
+async function apiFetch(path, options={}){
+  const session = getSession();
+  const headers = { 'Content-Type':'application/json', ...(options.headers||{}) };
+  if(session?.access_token) headers['Authorization'] = `Bearer ${session.access_token}`;
+  const res = await fetch(path, { ...options, headers });
+  return res.json();
+}
+
+/* ── render ── */
+async function renderPage(){
+  const session = getSession();
+  const content = document.getElementById('pageContent');
+
+  if(!session || !session.user){
+    content.innerHTML = `
+      <div class="signin-prompt">
+        <h2>Save your summer lists</h2>
+        <p>Create a free account to save every list you make — access them from any device, any time.</p>
+        <a class="btn-primary" href="/?signin=1">Sign in or create account</a><br>
+        <a class="btn-secondary" href="/">Make a list first →</a>
+      </div>`;
+    return;
+  }
+
+  const data = await apiFetch('/api/lists');
+  if(!data.success){
+    content.innerHTML = `<div class="empty-state"><h2>Something went wrong</h2><p>${data.error}</p></div>`;
+    return;
+  }
+
+  if(!data.lists.length){
+    content.innerHTML = `
+      <div class="empty-state">
+        <h2>No lists yet ☀️</h2>
+        <p>Head to the homepage and make your first summer bucket list — it'll appear here automatically.</p>
+        <a class="btn-primary" href="/">Make my first list</a>
+      </div>`;
+    return;
+  }
+
+  content.innerHTML = `<div class="lists-grid" id="listsGrid"></div>`;
+  const grid = document.getElementById('listsGrid');
+  data.lists.forEach(list => grid.appendChild(buildCard(list)));
+}
+
+function buildCard(list){
+  const card = document.createElement('div');
+  card.className = 'list-card';
+  card.dataset.id = list.id;
+
+  const items = Array.isArray(list.items) ? list.items : [];
+  const doneCount = items.filter(i=>i.d).length;
+  const preview = items.slice(0,5).map(i=>`<span class="preview-chip">${i.e||''} ${i.t}</span>`).join('');
+  const more = items.length > 5 ? `<span class="preview-more">+${items.length-5} more</span>` : '';
+
+  card.innerHTML = `
+    <div class="list-card-header">
+      <div class="list-title-wrap">
+        <div class="list-title" id="title-${list.id}">${escHtml(list.title)}</div>
+        <input class="list-title-edit" id="edit-${list.id}" value="${escHtml(list.title)}" />
+        <div class="list-meta">${fmtDate(list.created_at)} · ${items.length} item${items.length!==1?'s':''} · ${doneCount} done</div>
+      </div>
+      <div class="list-actions">
+        <button class="btn-icon" id="renameBtn-${list.id}" onclick="startRename('${list.id}')">✏️ Rename</button>
+        <button class="btn-save" id="saveBtn-${list.id}" onclick="saveRename('${list.id}')">Save</button>
+        <button class="btn-cancel" id="cancelBtn-${list.id}" onclick="cancelRename('${list.id}')">Cancel</button>
+        <button class="btn-icon danger" onclick="deleteList('${list.id}')">🗑 Delete</button>
+      </div>
+    </div>
+    ${items.length ? `<div class="list-preview">${preview}${more}</div>` : ''}
+    <div class="list-card-footer">
+      <button class="btn-icon" onclick="shareList('${list.id}')">🔗 Copy share link</button>
+      <button class="btn-icon" onclick="openList('${list.id}')">↗ Open list</button>
+      <button class="btn-icon" onclick="printList('${list.id}')">🖨 Print</button>
+    </div>`;
+
+  // Store list data on the element for later use
+  card._listData = list;
+  return card;
+}
+
+function escHtml(str){
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── rename ── */
+function startRename(id){
+  document.getElementById(`title-${id}`).style.display = 'none';
+  document.getElementById(`edit-${id}`).style.display = '';
+  document.getElementById(`edit-${id}`).focus();
+  document.getElementById(`renameBtn-${id}`).style.display = 'none';
+  document.getElementById(`saveBtn-${id}`).style.display = '';
+  document.getElementById(`cancelBtn-${id}`).style.display = '';
+}
+
+function cancelRename(id){
+  document.getElementById(`title-${id}`).style.display = '';
+  document.getElementById(`edit-${id}`).style.display = 'none';
+  document.getElementById(`renameBtn-${id}`).style.display = '';
+  document.getElementById(`saveBtn-${id}`).style.display = 'none';
+  document.getElementById(`cancelBtn-${id}`).style.display = 'none';
+}
+
+async function saveRename(id){
+  const input = document.getElementById(`edit-${id}`);
+  const newTitle = input.value.trim();
+  if(!newTitle){ showToast('Name cannot be empty.'); return; }
+
+  const btn = document.getElementById(`saveBtn-${id}`);
+  btn.textContent = 'Saving…'; btn.disabled = true;
+
+  const data = await apiFetch('/api/lists/rename', {
+    method:'POST',
+    body: JSON.stringify({ list_id: id, title: newTitle })
+  });
+
+  if(data.success){
+    document.getElementById(`title-${id}`).textContent = newTitle;
+    cancelRename(id);
+    showToast('List renamed ✓');
+  } else {
+    showToast('Could not rename — try again.');
+    btn.textContent = 'Save'; btn.disabled = false;
+  }
+}
+
+/* ── delete ── */
+async function deleteList(id){
+  if(!confirm('Delete this list? This cannot be undone.')) return;
+
+  const data = await apiFetch('/api/lists/delete', {
+    method:'DELETE',
+    body: JSON.stringify({ list_id: id })
+  });
+
+  if(data.success){
+    const card = document.querySelector(`.list-card[data-id="${id}"]`);
+    card.style.opacity = '0';
+    card.style.transition = 'opacity .3s';
+    setTimeout(()=>{ card.remove(); checkEmpty(); }, 300);
+    showToast('List deleted.');
+  } else {
+    showToast('Could not delete — try again.');
+  }
+}
+
+function checkEmpty(){
+  const grid = document.getElementById('listsGrid');
+  if(grid && !grid.children.length){
+    document.getElementById('pageContent').innerHTML = `
+      <div class="empty-state">
+        <h2>No lists left ☀️</h2>
+        <p>Make a new one on the homepage — it'll appear here automatically.</p>
+        <a class="btn-primary" href="/">Make a new list</a>
+      </div>`;
+  }
+}
+
+/* ── share ── */
+function shareList(id){
+  const card = document.querySelector(`.list-card[data-id="${id}"]`);
+  if(!card || !card._listData){ showToast('Could not generate link.'); return; }
+  const url = listToShareUrl(card._listData);
+  navigator.clipboard.writeText(url)
+    .then(()=>showToast('Share link copied! ☀️'))
+    .catch(()=>showToast('Could not copy — try again.'));
+}
+
+/* ── open ── */
+function openList(id){
+  const card = document.querySelector(`.list-card[data-id="${id}"]`);
+  if(!card || !card._listData){ return; }
+  const url = listToShareUrl(card._listData);
+  window.location.href = url;
+}
+
+/* ── print ── */
+function printList(id){
+  const card = document.querySelector(`.list-card[data-id="${id}"]`);
+  if(!card || !card._listData) return;
+  const list = card._listData;
+  const items = list.items.map(i=>`${i.d?'[x]':'[ ]'} ${i.e||''} ${i.t}`).join('\n');
+  const win = window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html><head><title>${list.title}</title>
+  <style>body{font-family:Georgia,serif;max-width:600px;margin:40px auto;color:#222;}
+  h1{font-size:28px;margin-bottom:6px;}
+  .meta{color:#888;font-size:14px;margin-bottom:24px;}
+  .item{font-size:18px;margin-bottom:12px;display:flex;gap:12px;}
+  .box{width:20px;height:20px;border:2px solid #333;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+  .done{text-decoration:line-through;color:#888;}
+  .footer{margin-top:40px;font-size:12px;color:#aaa;border-top:1px solid #eee;padding-top:16px;}
+  </style></head><body>
+  <h1>${list.title}</h1>
+  <div class="meta">Created ${fmtDate(list.created_at)} · ${list.items.length} items</div>
+  ${list.items.map(i=>`<div class="item"><div class="box">${i.d?'✓':''}</div><div class="${i.d?'done':''}">${i.e||''} ${i.t}</div></div>`).join('')}
+  <div class="footer">Made with Have a Great Summer · have-a-great-summer.netlify.app</div>
+  </body></html>`);
+  win.document.close();
+  win.print();
+}
+
+/* ── init ── */
+renderPage();
+</script>
+</body>
+</html>
