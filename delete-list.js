@@ -6,7 +6,7 @@ const supabase = createClient(
 );
 
 export default async (req) => {
-  if (req.method !== 'DELETE') {
+  if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
       status: 405, headers: { 'Content-Type': 'application/json' }
     });

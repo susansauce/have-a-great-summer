@@ -1372,7 +1372,7 @@ async function handleLogin(){
     document.getElementById('authSuccessMsg').textContent=`Welcome back, ${data.user.email}!`;
     document.getElementById('authLoginPanel').style.display='none';
     document.getElementById('authSuccessPanel').style.display='';
-    setTimeout(async()=>{ closeAuthModal(); currentListId=null; await loadFromDatabase(); }, 1800);
+    setTimeout(()=>{ window.location.href='/my-lists.html'; }, 1200);
   }catch(err){
     errEl.textContent=err.message;
     btn.disabled=false; btn.textContent='Sign in';
@@ -1398,7 +1398,7 @@ async function handleSignup(){
     document.getElementById('authSuccessMsg').textContent=`Account created! You're signed in as ${email}.`;
     document.getElementById('authSignupPanel').style.display='none';
     document.getElementById('authSuccessPanel').style.display='';
-    setTimeout(async()=>{ closeAuthModal(); currentListId=null; await loadFromDatabase(); }, 1800);
+    setTimeout(()=>{ window.location.href='/my-lists.html'; }, 1200);
   }catch(err){
     errEl.textContent=err.message;
     btn.disabled=false; btn.textContent='Create account';
@@ -1463,13 +1463,9 @@ if(new URLSearchParams(location.search).get('signin') === '1'){
   openAuthModal();
 }
 
-// Startup restore priority: URL param → database → localStorage
-(async()=>{
-  if(!tryRestoreFromUrl()){
-    const loadedFromDb=await loadFromDatabase();
-    if(!loadedFromDb) tryRestoreFromLocal();
-  }
-})();
+// Homepage always starts fresh — use My Lists to access saved lists.
+// Only restore if someone opened a direct ?list= share link.
+tryRestoreFromUrl();
 </script>
 
 <!-- AUTH MODAL -->
